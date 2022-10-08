@@ -1,0 +1,273 @@
+﻿@{
+    int activeStatus = (int)CNJewellerAdmin.Helper.RowStatus.Active;
+    int inActiveStatus = (int)CNJewellerAdmin.Helper.RowStatus.Inactive;
+}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-7">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <h3>User List</h3>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <div class="text-lg-right mt-3 mt-lg-0">
+                    <button type="button" id="filterBtn" data-id="0" class="btn btn-success waves-effect waves-light mr-1"><i class="mdi mdi-filter"></i></button>
+                    <button type="button" class="btn btn-success waves-effect waves-light mr-1 openUserDetailsForm"><i class="mdi mdi-plus-circle mr-1"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="display:none" id="filterDiv">
+    <div class="col-12">
+        <div class="card-box mt-3">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1>hello</h1><br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title"></h4>
+                <table id="userDetailsTable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th>OfficeName</th>
+                            <th>Name</th>
+                            <th>Mobile No</th>
+                            <th>Email</th>
+                            <th>JoiningDate</th>
+                            <th>RoleName</th>
+                            <th>GenderName</th>
+                               <th>City</th>
+                            <th>Pincode</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="userMasterModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form class="needs-validation" novalidate id="userForm">
+                <div id="userMasterDiv">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success waves-effect waves-light" id="saveUserDetails">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var userDatatable;
+        $(document).ready(function () {
+
+            userDatatable = $("#userDetailsTable").DataTable({
+                "ajax": {
+                    "url": '@Url.Action("GetUserList","UserDetails")',
+                    "type": "GET",
+                    "datatype": "json",
+                    'data': function (res) {
+                        res.officeId = 0;
+                    },
+                    "dataSrc": "",
+                    "responsive": true,
+                    "error": function () {
+                        alert("Error");
+                        //toastr.error("Failed to fetch subscribePlanTypes list", "SubscribePlanTypes");
+                    },
+                },
+                "pageLength": 50,
+                "columns": [
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.officeName + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.firstName + ' ' + row.middleName + ' ' + row.lastName + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                        return '<span class="title"><a href="tel:' + row.mobileNo + '">' + row.mobileNo + '</a></span>';
+                            //return '<span class="tooltip">Hover over me < span class="tooltiptext" > Tooltip text < /span>< /span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<a class="btn waves-effect waves-light" href="mailto:' + row.emailId + '" title="Send Mail" data-plugin="tippy" data-tippy-placement="top">' + row.emailId + '</a>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.joiningDate + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.roleName + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.genderName + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.city + '</span>';
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<span class="title">' + row.pincode + '</span>';
+                        }
+                    },
+
+                    {
+                        "mRender": function (data, type, row) {
+                            if (row.rowStatus == @activeStatus) {
+                                return '<span class="label label-success pull-right">' + row.rowStatusName + '</span>';
+                            }
+                            else {
+                                return '<span class="label label-danger pull-right">' + row.rowStatusName + '</span>';
+                            }
+                        }
+                    },
+                    {
+                        "mRender": function (data, type, row) {
+                            var htmlContent = '<div class="dropdown">';
+                            htmlContent += '<button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline dropdown-toggle " style="border-color: transparent;" type="button"><span class="ti-view-grid"></span></button>';
+                            htmlContent += '<ul class="dropdown-menu" data-dropdown-in="bounceIn" data-dropdown-out="bounceOut">';
+                            htmlContent += '<li><a href="#" class="openUserDetailsForm" data-id=' + row.id + '>Edit</a></li>';
+                            htmlContent += '<li class="label-danger"><a href="#" class="deleteUserDetails " data-id=' + row.id + '>Delete</a></li>';
+                            if (row.rowStatus == @activeStatus) {
+                                htmlContent += '<li><a href="#" class="updateUserDetails" data-id=' + row.id + ' data-statusId=' + @inActiveStatus + '>InActive</a></li>';
+                            }
+                            if (row.rowStatus == @inActiveStatus) {
+                                htmlContent += '<li><a href="#" class="updateUserDetails" data-id=' + row.id + ' data-statusId=' + @activeStatus + '>Active</a></li>';
+                            }
+                            htmlContent += '</ul>';
+                            htmlContent += '</div>';
+                            return htmlContent;
+                        }
+                    }
+                ],
+                'columnDefs': [{
+                    'targets': [0],
+                    'className': "capitalize left"
+                }, {
+                    'targets': [1],
+                    'className': "capitalize left"
+                },
+                {
+                    'targets': [2],
+                    'className': "capitalize left"
+                },
+                {
+                    'targets': [3],
+                    'orderable': true,
+                    "width": "10%",
+                    'className': "dt-center"
+                },
+                {
+                    'targets': [4],
+                    'orderable': false,
+                    "width": "10%",
+                },
+                ],
+                'aaSorting': [[1, 'asc']]
+            });
+        });
+
+        $(document).on('click', '.openUserDetailsForm', function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: '@Url.Action("OpenUserDetailsForm", "UserDetails")',
+                type: 'GET',
+                data: { 'id': id },
+                dataType: 'html',
+                success: function (data) {
+                    $("#userMasterDiv").html(data);
+                    $("#userMasterModel").modal('show');
+                     $(".selecte2Picker").select2();
+                    $(".flatpickr").flatpickr({
+                       dateFormat:"d/m/Y"
+                    });
+                },
+                error: function (e, v) {
+                    alert("error while opening office details form");
+                }
+            });
+        });
+
+        $('#saveUserDetails').on('click', function (e) {
+            e.preventDefault();
+            if ($("#userForm").parsley().validate()) {
+                var request = {
+                    Id: $("#hdnUserDetailsId").val(),
+                    OfficeId: $("#officeId").val(),
+                    FirstName: $("#firstName").val(),
+                    MiddleName: $("#middleName").val(),
+                    LastName: $("#lastName").val(),
+                    MobileNo: $("#mobileNo").val(),
+                    EmailId: $("#emailId").val(),
+                    City: $("#city").val(),
+                    Pincode: $("#pincode").val(),
+                    Address: $("#address").val(),
+                    JoiningDate: $("#joiningDate").val(),
+                    RoleId: $("#roleId").val(),
+                    UserType: $("#userType").val(),
+                    Gender: $("#gender").val(),
+                    Password: $("#password").val(),
+                    ProfilePic: $("#profilePic").val()
+                }
+                $.ajax({
+                    url: '@Url.Action("SaveUserDetals", "UserDetails")',
+                    type: 'POST',
+                    data: { 'request': request },
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.acknowledge === 1) {
+                            showSuccessToast("Save User", result.message);
+                            $("#userMasterModel").modal('hide');
+                            userDatatable.ajax.reload();
+                        }
+                        else {
+                            showErrorToast("Save User", result.message);
+                        }
+                    },
+                    error: function (e, c) {
+                        showErrorToast("Save User", "Failed to save office details");
+                    }
+                });
+            }
+        });
+
+    </script>
+}

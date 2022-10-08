@@ -1,0 +1,125 @@
+﻿@model CNJewellerAdmin.DTOs.UserDetails.CreateUpdateUserDetailRequest;
+
+<div class="modal-header cusmodelHeader">
+    @{
+        var headerText = "User";
+        if (Model.Id > 0)
+        {
+            headerText = "Update User Details";
+        }
+        else
+        {
+            headerText = "Add User Details";
+        }
+        <h4 class="modal-title cusmodelTitel">
+            @headerText
+        </h4>
+    }
+
+    <button type="button" class="close cusmodelTitel" data-dismiss="modal" aria-hidden="true">×</button>
+</div>
+<div class="modal-body p-2">
+    <div class="row">
+        <input type="hidden" asp-for="Id" id="hdnUserDetailsId" />
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Branch Code</label>
+                <select asp-for="OfficeId" asp-items="@(new SelectList(Model.Offices,"Id","Name"))" class="form-control selecte2Picker" required data-toggle="select2" id="officeId">
+                    <option>Please select one</option>
+                </select>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Role</label>
+                <select asp-for="RoleId" asp-items="@(new SelectList(Model.Roles,"Id","Name"))" class="form-control" required>
+                    <option>Please select one</option>
+                </select>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">FirstName</label>
+                <input asp-for="FirstName" type="text" class="form-control" id="firstName" placeholder="Please enter first name" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">MiddleName</label>
+                <input asp-for="MiddleName" type="text" class="form-control" id="middleName" placeholder="Please enter middle name">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Last Name</label>
+                <input asp-for="LastName" type="text" class="form-control" id="lastName" placeholder="Please enter last name" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Mobile No</label>
+                <input asp-for="MobileNo" type="text" class="form-control" id="mobileNo" placeholder="Please enter mobile no" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Email</label>
+                <input asp-for="EmailId" type="email" class="form-control" id="emailId" placeholder="Please enter email">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Joining Date</label>
+                <input asp-for="JoiningDate" type="text" class="form-control flatpickr" id="joiningDate" placeholder="Please enter city" required>
+            </div>
+        </div>
+        @if (Model.Id == 0)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="password" class="control-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Please enter city" required>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="confirmPassword" class="control-label">ConfirmPassword</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Please enter city" required>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Gender</label>
+                <select asp-for="Gender" asp-items="@(new SelectList(Model.Genders,"Id","Name"))" class="form-control" id="gender">
+                    <option>Please select one</option>
+                </select>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">City</label>
+                <input asp-for="City" type="text" class="form-control" id="city" placeholder="Please enter city" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Pincode</label>
+                <input asp-for="Pincode" type="number" class="form-control" id="pincode" placeholder="Please enter pincode" required>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Address</label>
+                <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Please enter description" required>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,241 @@
+﻿@{
+	int activeStatus = (int)CNJewellerAdmin.Helper.RowStatus.Active;
+	int inActiveStatus = (int)CNJewellerAdmin.Helper.RowStatus.Inactive;
+}
+
+<div class="row mt-4">
+	<div class="col-12">
+		<div class="row">
+			<div class="col-lg-7">
+				<form class="form-inline">
+					<div class="form-group">
+						<h3>Office Details</h3>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-5">
+				<div class="text-lg-right mt-3 mt-lg-0">
+												<button type="button" id="filterBtn" data-id="0" class="btn btn-success waves-effect waves-light mr-1"><i class="mdi mdi-filter"></i></button>
+								<button type="button" class="btn btn-success waves-effect waves-light mr-1 openOfficeDetailsForm"><i class="mdi mdi-plus-circle mr-1"></i> Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="display:none" id="filterDiv">
+	<div class="col-12">
+		<div class="card-box mt-3">
+			<div class="row">
+				<div class="col-lg-8">
+					<h1>hello</h1><br />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row mt-3">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="header-title"></h4>
+				<table id="officeDetailsTable" class="table dt-responsive nowrap w-100">
+					<thead>
+						<tr>
+							<th>BranchCode</th>
+							<th>Name</th>
+							<th>PhoneNo</th>
+							<th>Email</th>
+							<th>City</th>
+							<th>Pincode</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="officeMasterModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="needs-validation" novalidate id="officeForm">
+				<div id="officeMasterDiv">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-success waves-effect waves-light" id="saveOfficeDetails">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+		var officeDatatable;
+		  $(document).ready(function () {
+
+			officeDatatable = $("#officeDetailsTable").DataTable({
+				"ajax": {
+					"url": '@Url.Action("GetOfficeList","OfficeMaster")',
+					"type": "GET",
+					"datatype": "json",
+					'data': function (res) {
+						res.statusId = 0;
+					},
+					"dataSrc": "",
+					"responsive": true,
+					"error": function () {
+						alert("Error");
+						//toastr.error("Failed to fetch subscribePlanTypes list", "SubscribePlanTypes");
+					},
+				},
+				"pageLength": 50,
+				"columns": [
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.branchCode + '</span>';
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.officeName + '</span>';
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.phoneNo + '</span>';
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.email + '</span>';
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.city + '</span>';
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							return '<span class="title">' + row.pincode + '</span>';
+						}
+					},
+
+					{
+						"mRender": function (data, type, row) {
+							if (row.rowStatus == @activeStatus) {
+								return '<span class="label label-success pull-right">' + row.rowStatusName + '</span>';
+							}
+							else {
+								return '<span class="label label-danger pull-right">' + row.rowStatusName + '</span>';
+							}
+						}
+					},
+					{
+						"mRender": function (data, type, row) {
+							var htmlContent = '<div class="dropdown">';
+							htmlContent += '<button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline dropdown-toggle " style="border-color: transparent;" type="button"><span class="ti-view-grid"></span></button>';
+							htmlContent += '<ul class="dropdown-menu" data-dropdown-in="bounceIn" data-dropdown-out="bounceOut">';
+							htmlContent += '<li><a href="#" class="openOfficeDetailsForm" data-id=' + row .id+ '>Edit</a></li>';
+							htmlContent += '<li class="label-danger"><a href="#" class="deleteOfficeDetails " data-id=' + row.id + '>Delete</a></li>';
+							if (row.rowStatus == @activeStatus) {
+								htmlContent += '<li><a href="#" class="updateOfficeDetails" data-id=' + row.id + ' data-statusId=' + @inActiveStatus + '>InActive</a></li>';
+							}
+							if (row.rowStatus == @inActiveStatus) {
+								htmlContent += '<li><a href="#" class="updateOfficeDetails" data-id=' + row.id + ' data-statusId=' + @activeStatus + '>Active</a></li>';
+							}
+							htmlContent += '</ul>';
+							htmlContent += '</div>';
+							return htmlContent;
+						}
+					}
+				],
+				'columnDefs': [{
+                    'targets': [0],
+                    'className': "capitalize left"
+                    },{
+                    'targets': [1],
+                    'className': "capitalize left"
+					},
+					{
+                    'targets': [2],
+                    'className': "capitalize left"
+					},
+					{
+					'targets': [3],
+					'orderable': true,
+					"width": "10%",
+					'className': "dt-center"
+				},
+				{
+					'targets': [4],
+					'orderable': false,
+					"width": "10%",
+				},
+			],
+				'aaSorting': [[1, 'asc']]
+			});
+	});
+
+		$(document).on('click', '.openOfficeDetailsForm', function () {
+			var id = $(this).attr('data-id');
+            $.ajax({
+				url: '@Url.Action("OpenOfficeDetailsForm", "OfficeMaster")',
+                type: 'GET',
+				data: { 'id': id },
+                dataType: 'html',
+                success: function (data) {
+					$("#officeMasterDiv").html(data);
+					$("#officeMasterModel").modal('show');
+                },
+                error: function (e, v) {
+                    alert("error while opening office details form");
+                }
+            });
+        });
+
+		$('#saveOfficeDetails').on('click', function (e) {
+            e.preventDefault();
+			if ($("#officeForm").parsley().validate()) {
+             var request = {
+				Id: $("#hdnOfficeId").val(),
+				OfficeName: $("#officeName").val(),
+				PhoneNo: $("#phoneNo").val(),
+				Email: $("#email").val(),
+				City: $("#city").val(),
+				Pincode: $("#pincode").val(),
+				Address: $("#address").val(),
+				BranchCode: $("#branchCode").val(),
+			 }
+                $.ajax({
+				url: '@Url.Action("SaveOfficeDetals", "OfficeMaster")',
+                    type: 'POST',
+                    data: { 'request': request },
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#officeMasterModel").modal('hide');
+                        if (result.acknowledge === 1) {
+						showSuccessToast("Save Office", result.message);
+						officeDatatable.ajax.reload();
+                        }
+                        else {
+						showErrorToast("Save Office", result.message);
+                        }
+                    },
+                    error: function (e,c) {
+					showErrorToast("Save Office", "Failed to save office details");
+                   }
+                });
+			}
+        });
+
+		</script>}

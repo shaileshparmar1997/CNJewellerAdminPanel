@@ -1,0 +1,69 @@
+﻿@model CNJewellerAdmin.DTOs.Office.CreateUpdateOfficeMasterRequest
+
+
+<div class="modal-header cusmodelHeader">
+    @{
+        var headerText = "Office";
+        if (Model.Id > 0)
+        {
+            headerText = "Update Office";
+        }
+        else
+        {
+            headerText = "Add Office";
+        }
+        <h4 class="modal-title cusmodelTitel">
+            @headerText
+        </h4>
+    }
+
+    <button type="button" class="close cusmodelTitel" data-dismiss="modal" aria-hidden="true">×</button>
+</div>
+<div class="modal-body p-2">
+    <div class="row">
+        <input type="hidden" asp-for="Id" id="hdnOfficeId" />
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Branch Code</label>
+                <input asp-for="BranchCode" type="text" class="form-control" id="branchCode" placeholder="Please enter branch code">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Office Name</label>
+                <input asp-for="OfficeName" type="text" class="form-control" id="officeName" placeholder="Please enter office name" data-error="Office name is required" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">PhoneNo</label>
+                <input asp-for="PhoneNo" type="number" class="form-control" id="phoneNo" placeholder="Please enter phonr no" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Please enter email">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">City</label>
+                <input asp-for="City" type="text" class="form-control" id="city" placeholder="Please enter city" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Pincode</label>
+                <input asp-for="Pincode" type="number" class="form-control" id="pincode" placeholder="Please enter pincode" required>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-3" class="control-label">Address</label>
+                <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Please enter description" required>
+            </div>
+        </div>
+    </div>
+</div>
