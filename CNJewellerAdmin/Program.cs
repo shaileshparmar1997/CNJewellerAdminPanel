@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.CookiePolicy;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromDays(15);
@@ -26,8 +26,8 @@ builder.Services.AddAuthentication(o =>
         }).AddCookie()
         .AddGoogleOpenIdConnect(options =>
         {
-            options.ClientId = "219931079707-223o6dpov3lff8504glrr3d3g7c7ela3.apps.googleusercontent.com";
-            options.ClientSecret = "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";
+            options.ClientId = "1003902974858-5524oc4vferstdlr3hh3p4fv3sof9g1a.apps.googleusercontent.com";
+            options.ClientSecret = "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";
         });
 
 var app = builder.Build();

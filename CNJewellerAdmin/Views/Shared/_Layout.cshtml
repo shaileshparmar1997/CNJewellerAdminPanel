@@ -662,6 +662,9 @@
                                     <li>
                                         <a href="@Url.Action("DriveFileList","Drive")">Drive</a>
                                     </li>
+                                        <li>
+                                        <a href="@Url.Action("GetDriveData","Drive")">Drive List</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -669,6 +672,18 @@
                             <a href="@Url.Action("Index","UserDetails")">
                                 <i class="mdi mdi-forum-outline"></i>
                                 <span> User Details </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("GetGoogleDriveFiles","GDrive")">
+                                <i class="mdi mdi-forum-outline"></i>
+                                <span> Drives List </span>
+                            </a>
+                        </li>
+                          <li>
+                            <a href="@Url.Action("FolderLists","GDrive")">
+                                <i class="mdi mdi-forum-outline"></i>
+                                <span> Folder List </span>
                             </a>
                         </li>
 

@@ -1,84 +1,29 @@
 ﻿using CNJewellerAdmin.DTOs.GoogleDrive;
-using CNJewellerAdmin.Models;
+using CNJewellerAdmin.Helper;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Auth.OAuth2.Flows;
-using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Download;
 using Google.Apis.Drive.v2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Microsoft.CodeAnalysis;
-using static Google.Apis.Drive.v3.DriveService;
+using Microsoft.Extensions.Hosting;
 
-namespace CNJewellerAdmin.Helper.GDrive
+namespace CNJewellerAdmin.Models
 {
-    public class GDriveHelper
+    public class GoogleDriveFilesRepository
     {
+        public   string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
 
         private readonly IWebHostEnvironment _hostEnvironment;
-        public GDriveHelper(IWebHostEnvironment hostEnvironment)
+        public GoogleDriveFilesRepository(IWebHostEnvironment hostEnvironment)
         {
             this._hostEnvironment = hostEnvironment;
         }
-
-        public string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
-
-        //When creating a folder in Google Drive
-        //public void CreateFolderOnDrive(string Folder_Name)
-        //{
-        //    Google.Apis.Drive.v3.DriveService service = GetService_v3();
-
-        //    Google.Apis.Drive.v3.Data.File FileMetaData = new
-        //    Google.Apis.Drive.v3.Data.File();
-        //    FileMetaData.Name = Folder_Name;
-        //    FileMetaData.MimeType = "application/vnd.google-apps.folder";
-
-        //    Google.Apis.Drive.v3.FilesResource.CreateRequest request;
-
-        //    request = service.Files.Create(FileMetaData);
-        //    request.Fields = "id";
-        //    var file = request.Execute();
-        //}
-
-        ////When you want to upload a file in the specific folder, you must specify the correct folder id in the parent
-        //public static void FileUploadInFolder(string folderId, HttpPostedFileBase file)
-        //{
-        //    if (file != null && file.ContentLength > 0)
-        //    {
-        //        Google.Apis.Drive.v3.DriveService service = GetService_v3();
-
-        //        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
-        //        Path.GetFileName(file.FileName));
-        //        file.SaveAs(path);
-
-        //        var FileMetaData = new Google.Apis.Drive.v3.Data.File()
-        //        {
-        //            Name = Path.GetFileName(file.FileName),
-        //            MimeType = MimeMapping.GetMimeMapping(path),
-        //            Parents = new List<string>
-        //            {
-        //                folderId
-        //            }
-        //        };
-        //        Google.Apis.Drive.v3.FilesResource.CreateMediaUpload request;
-        //        using (var stream = new System.IO.FileStream(path,
-        //        System.IO.FileMode.Open))
-        //        {
-        //            request = service.Files.Create(FileMetaData, stream,
-        //            FileMetaData.MimeType);
-        //            request.Fields = "id";
-        //            request.Upload();
-        //        }
-        //        var file1 = request.ResponseBody;
-        //    }
-        //}
-
-        //create Drive API service.    
+        //create Drive API service.
         public Google.Apis.Drive.v3.DriveService GetService()
         {
-            //get Credentials from client_secret.json file     
+            //get Credentials from client_secret.json file 
             UserCredential credential;
-            //var CSPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/");
             string CSPath = Path.Combine(_hostEnvironment.WebRootPath, "Content");
 
             using (var stream = new FileStream(Path.Combine(CSPath, "client_secret.json"), FileMode.Open, FileAccess.Read))
@@ -94,16 +39,16 @@ namespace CNJewellerAdmin.Helper.GDrive
                     new FileDataStore(FilePath, true)).Result;
             }
 
-            //create Drive API service.    
+            //create Drive API service.
             Google.Apis.Drive.v3.DriveService service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "GoogleDriveRestAPI-v3",
+                ApplicationName = "GDrive",
             });
             return service;
         }
 
-        public Google.Apis.Drive.v2.DriveService GetService_v2()
+        public  Google.Apis.Drive.v2.DriveService GetService_v2()
         {
             UserCredential credential;
             var CSPath = Path.Combine(_hostEnvironment.WebRootPath, "Content");
@@ -121,7 +66,7 @@ namespace CNJewellerAdmin.Helper.GDrive
                     new FileDataStore(FilePath, true)).Result;
             }
 
-            //Create Drive API service.    
+            //Create Drive API service.
             Google.Apis.Drive.v2.DriveService service = new Google.Apis.Drive.v2.DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
@@ -130,31 +75,31 @@ namespace CNJewellerAdmin.Helper.GDrive
             return service;
         }
 
-        //get all files from Google Drive.    
-        public List<GoogleDriveFile> GetDriveFiles()
+        //get all files from Google Drive.
+        public List<GoogleDriveFileNew> GetDriveFiles()
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
-            // Define parameters of request.    
+            // Define parameters of request.
             Google.Apis.Drive.v3.FilesResource.ListRequest FileListRequest = service.Files.List();
-            // for getting folders only.    
-            //FileListRequest.Q = "mimeType='application/vnd.google-apps.folder'";    
+            // for getting folders only.
+            //FileListRequest.Q = "mimeType='application/vnd.google-apps.folder'";
             FileListRequest.Fields = "nextPageToken, files(*)";
 
-            // List files.    
+            // List files.
             IList<Google.Apis.Drive.v3.Data.File> files = FileListRequest.Execute().Files;
-            List<GoogleDriveFile> FileList = new List<GoogleDriveFile>();
+            List<GoogleDriveFileNew> FileList = new List<GoogleDriveFileNew>();
 
 
-            // For getting only folders    
-            // files = files.Where(x => x.MimeType == "application/vnd.google-apps.folder").ToList();    
+            // For getting only folders
+            // files = files.Where(x => x.MimeType == "application/vnd.google-apps.folder").ToList();
 
 
             if (files != null && files.Count > 0)
             {
                 foreach (var file in files)
                 {
-                    GoogleDriveFile File = new GoogleDriveFile
+                    GoogleDriveFileNew File = new GoogleDriveFileNew
                     {
                         Id = file.Id,
                         Name = file.Name,
@@ -170,7 +115,37 @@ namespace CNJewellerAdmin.Helper.GDrive
             return FileList;
         }
 
-        //file Upload to the Google Drive root folder.    
+        //file Upload to the Google Drive root folder.
+        //public   void FileUpload(IFormFile file)
+        //{
+        //    if (file != null && file.ContentLength > 0)
+        //    {
+        //        Google.Apis.Drive.v3.DriveService service = GetService();
+
+        //        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
+        //        Path.GetFileName(file.FileName));
+        //        file.SaveAs(path);
+
+        //        var FileMetaData = new Google.Apis.Drive.v3.Data.File();
+        //        FileMetaData.Name = Path.GetFileName(file.FileName);
+        //        FileMetaData.MimeType = MimeMapping.GetMimeMapping(path);
+
+        //        Google.Apis.Drive.v3.FilesResource.CreateMediaUpload request;
+
+        //        using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
+        //        {
+        //            request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
+        //            request.Fields = "id";
+        //            request.Upload();
+        //        }
+
+
+        //        // Create Folder in Drive
+
+
+        //    }
+        //}
+
         public void FileUpload(IFormFile file)
         {
             if (file != null)
@@ -199,7 +174,7 @@ namespace CNJewellerAdmin.Helper.GDrive
             }
         }
 
-        //Download file from Google Drive by fileId.    
+        //Download file from Google Drive by fileId.
         public string DownloadGoogleFile(string fileId)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
@@ -212,9 +187,9 @@ namespace CNJewellerAdmin.Helper.GDrive
 
             MemoryStream stream1 = new MemoryStream();
 
-            // Add a handler which will be notified on progress changes.    
-            // It will notify on each chunk download and when the    
-            // download is completed or failed.    
+            // Add a handler which will be notified on progress changes.
+            // It will notify on each chunk download and when the
+            // download is completed or failed.
             request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
             {
                 switch (progress.Status)
@@ -241,8 +216,8 @@ namespace CNJewellerAdmin.Helper.GDrive
             return FilePath;
         }
 
-        // file save to server path    
-        private static void SaveStream(MemoryStream stream, string FilePath)
+        // file save to server path
+        private   void SaveStream(MemoryStream stream, string FilePath)
         {
             using (System.IO.FileStream file = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite))
             {
@@ -250,20 +225,20 @@ namespace CNJewellerAdmin.Helper.GDrive
             }
         }
 
-        //Delete file from the Google drive    
-        public void DeleteFile(GoogleDriveFile files)
+        //Delete file from the Google drive
+        public   void DeleteFile(GoogleDriveFileNew files)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
             try
             {
-                // Initial validation.    
+                // Initial validation.
                 if (service == null)
                     throw new ArgumentNullException("service");
 
                 if (files == null)
                     throw new ArgumentNullException(files.Id);
 
-                // Make the request.    
+                // Make the request.
                 service.Files.Delete(files.Id).Execute();
             }
             catch (Exception ex)
@@ -272,14 +247,14 @@ namespace CNJewellerAdmin.Helper.GDrive
             }
         }
 
-        public List<GoogleDriveFile> GetContainsInFolder(String folderId)
+        public   List<GoogleDriveFileNew> GetContainsInFolder(String folderId)
         {
             List<string> ChildList = new List<string>();
             Google.Apis.Drive.v2.DriveService ServiceV2 = GetService_v2();
             ChildrenResource.ListRequest ChildrenIDsRequest = ServiceV2.Children.List(folderId);
 
-            // for getting only folders    
-            //ChildrenIDsRequest.Q = "mimeType='application/vnd.google-apps.folder'";    
+            // for getting only folders
+            //ChildrenIDsRequest.Q = "mimeType='application/vnd.google-apps.folder'";
             do
             {
                 var children = ChildrenIDsRequest.Execute();
@@ -295,9 +270,9 @@ namespace CNJewellerAdmin.Helper.GDrive
 
             } while (!String.IsNullOrEmpty(ChildrenIDsRequest.PageToken));
 
-            //Get All File List    
-            List<GoogleDriveFile> AllFileList = GetDriveFiles();
-            List<GoogleDriveFile> Filter_FileList = new List<GoogleDriveFile>();
+            //Get All File List
+            List<GoogleDriveFileNew> AllFileList = GetDriveFiles();
+            List<GoogleDriveFileNew> Filter_FileList = new List<GoogleDriveFileNew>();
 
             foreach (string Id in ChildList)
             {
@@ -306,8 +281,8 @@ namespace CNJewellerAdmin.Helper.GDrive
             return Filter_FileList;
         }
 
-        // Create Folder in root    
-        public void CreateFolder(string FolderName)
+        // Create Folder in root
+        public   void CreateFolder(string FolderName)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
@@ -323,8 +298,8 @@ namespace CNJewellerAdmin.Helper.GDrive
             Console.WriteLine("Folder ID: " + file.Id);
         }
 
-        // Create Folder in existing folder    
-        public void CreateFolderInFolder(string folderId, string FolderName)
+        // Create Folder in existing folder
+        public   void CreateFolderInFolder(string folderId, string FolderName)
         {
 
             Google.Apis.Drive.v3.DriveService service = GetService();
@@ -334,10 +309,11 @@ namespace CNJewellerAdmin.Helper.GDrive
                 Name = Path.GetFileName(FolderName),
                 MimeType = "application/vnd.google-apps.folder",
                 Parents = new List<string>
-                   {
-                       folderId
-                   }
+                    {
+                        folderId
+                    }
             };
+
 
             Google.Apis.Drive.v3.FilesResource.CreateRequest request;
 
@@ -347,55 +323,59 @@ namespace CNJewellerAdmin.Helper.GDrive
             Console.WriteLine("Folder ID: " + file.Id);
 
             var file1 = request;
+
         }
 
-        // File upload in existing folder    
-        public void FileUploadInFolder(string folderId, IFormFile file)
-        {
-            if (file != null)
-            {
-                Google.Apis.Drive.v3.DriveService service = GetService();
-                var path = Path.Combine(_hostEnvironment.WebRootPath, "GoogleDriveFiles", Path.GetFileName(file.FileName));
-                // file.SaveAs(path);
-                System.IO.File.Create(path);
+        // File upload in existing folder
+        //public   void FileUploadInFolder(string folderId, HttpPostedFileBase file)
+        //{
+        //    if (file != null && file.ContentLength > 0)
+        //    {
+        //        Google.Apis.Drive.v3.DriveService service = GetService();
 
-                var FileMetaData = new Google.Apis.Drive.v3.Data.File()
-                {
-                    Name = Path.GetFileName(file.FileName),
-                    MimeType = MimeHelper.GetMimeMapping(path),
-                    Parents = new List<string>
-                   {
-                       folderId
-                   }
-                };
+        //        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
+        //        Path.GetFileName(file.FileName));
+        //        file.SaveAs(path);
 
-                Google.Apis.Drive.v3.FilesResource.CreateMediaUpload request;
-                using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
-                {
-                    request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
-                    request.Fields = "id";
-                    request.Upload();
-                }
-                var file1 = request.ResponseBody;
-            }
-        }
+        //        var FileMetaData = new Google.Apis.Drive.v3.Data.File()
+        //        {
+        //            Name = Path.GetFileName(file.FileName),
+        //            MimeType = MimeMapping.GetMimeMapping(path),
+        //            Parents = new List<string>
+        //            {
+        //                folderId
+        //            }
+        //        };
+
+        //        Google.Apis.Drive.v3.FilesResource.CreateMediaUpload request;
+        //        using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
+        //        {
+        //            request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
+        //            request.Fields = "id";
+        //            request.Upload();
+        //        }
+        //        var file1 = request.ResponseBody;
+        //    }
+        //}
 
 
-        // check Folder name exist or note in root    
-        public bool CheckFolder(string FolderName)
+        // check Folder name exist or note in root
+        public   bool CheckFolder(string FolderName)
         {
             bool IsExist = false;
+
             Google.Apis.Drive.v3.DriveService service = GetService();
 
-            // Define the parameters of the request.    
+            // Define parameters of request.
             Google.Apis.Drive.v3.FilesResource.ListRequest FileListRequest = service.Files.List();
             FileListRequest.Fields = "nextPageToken, files(*)";
 
-            // List files.    
+            // List files.
             IList<Google.Apis.Drive.v3.Data.File> files = FileListRequest.Execute().Files;
-            List<GoogleDriveFile> FileList = new List<GoogleDriveFile>();
+            List<GoogleDriveFileNew> FileList = new List<GoogleDriveFileNew>();
 
-            //For getting only folders    
+
+            //For getting only folders
             files = files.Where(x => x.MimeType == "application/vnd.google-apps.folder" && x.Name == FolderName).ToList();
 
             if (files.Count > 0)
@@ -406,19 +386,19 @@ namespace CNJewellerAdmin.Helper.GDrive
         }
 
 
-        public List<GoogleDriveFile> GetDriveFolders()
+        public   List<GoogleDriveFileNew> GetDriveFolders()
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
-            List<GoogleDriveFile> FolderList = new List<GoogleDriveFile>();
+            List<GoogleDriveFileNew> FolderList = new List<GoogleDriveFileNew>();
 
             Google.Apis.Drive.v3.FilesResource.ListRequest request = service.Files.List();
             request.Q = "mimeType='application/vnd.google-apps.folder'";
-            request.Fields = "files(id, name)";
+            request.Fields = "files(id, name, size)";
 
             Google.Apis.Drive.v3.Data.FileList result = request.Execute();
             foreach (var file in result.Files)
             {
-                GoogleDriveFile File = new GoogleDriveFile
+                GoogleDriveFileNew File = new GoogleDriveFileNew
                 {
                     Id = file.Id,
                     Name = file.Name,
@@ -431,17 +411,17 @@ namespace CNJewellerAdmin.Helper.GDrive
             return FolderList;
         }
 
-        public string MoveFiles(String fileId, String folderId)
+        public   string MoveFiles(String fileId, String folderId)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
-            // Retrieve the existing parents to remove    
+            // Retrieve the existing parents to remove
             Google.Apis.Drive.v3.FilesResource.GetRequest getRequest = service.Files.Get(fileId);
             getRequest.Fields = "parents";
             Google.Apis.Drive.v3.Data.File file = getRequest.Execute();
             string previousParents = String.Join(",", file.Parents);
 
-            // Move the file to the new folder    
+            // Move the file to the new folder
             Google.Apis.Drive.v3.FilesResource.UpdateRequest updateRequest = service.Files.Update(new Google.Apis.Drive.v3.Data.File(), fileId);
             updateRequest.Fields = "id, parents";
             updateRequest.AddParents = folderId;
@@ -457,20 +437,20 @@ namespace CNJewellerAdmin.Helper.GDrive
                 return "Fail";
             }
         }
-        public string CopyFiles(String fileId, String folderId)
+        public   string CopyFiles(String fileId, String folderId)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
-            // Retrieve the existing parents to remove    
+            // Retrieve the existing parents to remove
             Google.Apis.Drive.v3.FilesResource.GetRequest getRequest = service.Files.Get(fileId);
             getRequest.Fields = "parents";
             Google.Apis.Drive.v3.Data.File file = getRequest.Execute();
 
-            // Copy the file to the new folder    
+            // Copy the file to the new folder
             Google.Apis.Drive.v3.FilesResource.UpdateRequest updateRequest = service.Files.Update(new Google.Apis.Drive.v3.Data.File(), fileId);
             updateRequest.Fields = "id, parents";
             updateRequest.AddParents = folderId;
-            //updateRequest.RemoveParents = previousParents;    
+            //updateRequest.RemoveParents = previousParents;
             file = updateRequest.Execute();
             if (file != null)
             {
@@ -482,7 +462,7 @@ namespace CNJewellerAdmin.Helper.GDrive
             }
         }
 
-        private void RenameFile(String fileId, String newTitle)
+        private   void RenameFile(String fileId, String newTitle)
         {
             try
             {
@@ -491,74 +471,18 @@ namespace CNJewellerAdmin.Helper.GDrive
                 Google.Apis.Drive.v2.Data.File file = new Google.Apis.Drive.v2.Data.File();
                 file.Title = newTitle;
 
-                // Rename the file.    
+                // Rename the file.
                 Google.Apis.Drive.v2.FilesResource.PatchRequest request = service.Files.Patch(file, fileId);
                 Google.Apis.Drive.v2.Data.File updatedFile = request.Execute();
 
-                //return updatedFile;    
+                //return updatedFile;
             }
             catch (Exception e)
             {
                 Console.WriteLine("An error occurred: " + e.Message);
-                //return null;    
+                //return null;
             }
         }
 
-        //public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
-        //{
-        //    var service = GetService1();
-        //    var fileList = service.Files.List();
-        //    fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
-        //    fileList.Fields = "nextPageToken, files(id, name, size, mimeType)";
-
-        //    var result = new List<Google.Apis.Drive.v3.Data.File>();
-        //    string pageToken = null;
-        //    do
-        //    {
-        //        fileList.PageToken = pageToken;
-        //        var filesResult = fileList.Execute();
-        //        var files = filesResult.Items;
-        //        pageToken = filesResult.NextPageToken;
-        //        result.AddRange(files);
-        //    }
-        //    while (pageToken != null);
-        //    return result;
-        //}
-
-        private static DriveService GetService1()
-        {
-            var tokenResponse = new TokenResponse
-            {
-                AccessToken = "...",
-                RefreshToken = "...",
-            };
-
-            var applicationName = "gdrive-364805";// Use the name of the project in Google Cloud
-           // var applicationName = "CNJewellers";// Use the name of the project in Google Cloud
-            var username = "shyamal.ikart@gmail.com"; // Use your email
-            //var username = "shaileshparmar1997@gmail.com"; // Use your email
-
-            var apiCodeFlow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
-            {
-                ClientSecrets = new ClientSecrets
-                {
-                    ClientId = "1003902974858-5524oc4vferstdlr3hh3p4fv3sof9g1a.apps.googleusercontent.com",
-                    //ClientId = "90293180163-nqig5jnh31iqn698mba11b7lbni44hkh.apps.googleusercontent.com",
-                    ClientSecret = "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"
-                    //ClientSecret = "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"
-                },
-                Scopes = new[] { Scope.Drive },
-                DataStore = new FileDataStore(applicationName)
-            });
-
-            var credential = new UserCredential(apiCodeFlow, username, tokenResponse);
-
-            var service = new DriveService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = applicationName
-            });
-            return service;
-        }
     }
 }
