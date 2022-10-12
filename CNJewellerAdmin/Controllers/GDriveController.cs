@@ -64,10 +64,12 @@ namespace CNJewellerAdmin.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult GetContainsInFolder(string folderId)
+
+        public IActionResult GetContainsInFolder(string folderId)
         {
-            return View(_GDriveHelper.GetContainsInFolder(folderId));
+            List<GoogleDriveFileNew> result = new List<GoogleDriveFileNew>();
+            result = _GDriveHelper.GetContainsInFolder(folderId);
+            return View("GetContainsInFolder", result);
         }
 
         [HttpPost]

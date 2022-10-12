@@ -12,7 +12,7 @@ namespace CNJewellerAdmin.Models
 {
     public class GoogleDriveFilesRepository
     {
-        public   string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
+        public string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
 
         private readonly IWebHostEnvironment _hostEnvironment;
         public GoogleDriveFilesRepository(IWebHostEnvironment hostEnvironment)
@@ -48,7 +48,7 @@ namespace CNJewellerAdmin.Models
             return service;
         }
 
-        public  Google.Apis.Drive.v2.DriveService GetService_v2()
+        public Google.Apis.Drive.v2.DriveService GetService_v2()
         {
             UserCredential credential;
             var CSPath = Path.Combine(_hostEnvironment.WebRootPath, "Content");
@@ -97,7 +97,7 @@ namespace CNJewellerAdmin.Models
 
             if (files != null && files.Count > 0)
             {
-                foreach (var file in files)
+                foreach (var file in files.OrderBy(x => x.MimeType))
                 {
                     GoogleDriveFileNew File = new GoogleDriveFileNew
                     {
@@ -107,7 +107,9 @@ namespace CNJewellerAdmin.Models
                         Version = file.Version,
                         CreatedTime = file.CreatedTime,
                         Parents = file.Parents,
-                        MimeType = file.MimeType
+                        MimeType = file.MimeType,
+                        ThumbnailLink = file.ThumbnailLink,
+                        FileExtensions = file.FileExtension
                     };
                     FileList.Add(File);
                 }
@@ -217,7 +219,7 @@ namespace CNJewellerAdmin.Models
         }
 
         // file save to server path
-        private   void SaveStream(MemoryStream stream, string FilePath)
+        private void SaveStream(MemoryStream stream, string FilePath)
         {
             using (System.IO.FileStream file = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite))
             {
@@ -226,7 +228,7 @@ namespace CNJewellerAdmin.Models
         }
 
         //Delete file from the Google drive
-        public   void DeleteFile(GoogleDriveFileNew files)
+        public void DeleteFile(GoogleDriveFileNew files)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
             try
@@ -247,7 +249,7 @@ namespace CNJewellerAdmin.Models
             }
         }
 
-        public   List<GoogleDriveFileNew> GetContainsInFolder(String folderId)
+        public List<GoogleDriveFileNew> GetContainsInFolder(String folderId)
         {
             List<string> ChildList = new List<string>();
             Google.Apis.Drive.v2.DriveService ServiceV2 = GetService_v2();
@@ -282,7 +284,7 @@ namespace CNJewellerAdmin.Models
         }
 
         // Create Folder in root
-        public   void CreateFolder(string FolderName)
+        public void CreateFolder(string FolderName)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
@@ -299,7 +301,7 @@ namespace CNJewellerAdmin.Models
         }
 
         // Create Folder in existing folder
-        public   void CreateFolderInFolder(string folderId, string FolderName)
+        public void CreateFolderInFolder(string folderId, string FolderName)
         {
 
             Google.Apis.Drive.v3.DriveService service = GetService();
@@ -360,7 +362,7 @@ namespace CNJewellerAdmin.Models
 
 
         // check Folder name exist or note in root
-        public   bool CheckFolder(string FolderName)
+        public bool CheckFolder(string FolderName)
         {
             bool IsExist = false;
 
@@ -386,7 +388,7 @@ namespace CNJewellerAdmin.Models
         }
 
 
-        public   List<GoogleDriveFileNew> GetDriveFolders()
+        public List<GoogleDriveFileNew> GetDriveFolders()
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
             List<GoogleDriveFileNew> FolderList = new List<GoogleDriveFileNew>();
@@ -411,7 +413,7 @@ namespace CNJewellerAdmin.Models
             return FolderList;
         }
 
-        public   string MoveFiles(String fileId, String folderId)
+        public string MoveFiles(String fileId, String folderId)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
@@ -437,7 +439,7 @@ namespace CNJewellerAdmin.Models
                 return "Fail";
             }
         }
-        public   string CopyFiles(String fileId, String folderId)
+        public string CopyFiles(String fileId, String folderId)
         {
             Google.Apis.Drive.v3.DriveService service = GetService();
 
@@ -462,7 +464,7 @@ namespace CNJewellerAdmin.Models
             }
         }
 
-        private   void RenameFile(String fileId, String newTitle)
+        private void RenameFile(String fileId, String newTitle)
         {
             try
             {

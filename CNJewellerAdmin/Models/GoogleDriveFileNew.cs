@@ -1,4 +1,6 @@
-﻿namespace CNJewellerAdmin.Models
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+
+namespace CNJewellerAdmin.Models
 {
     public class GoogleDriveFileNew
     {
@@ -9,5 +11,14 @@
         public DateTime? CreatedTime { get; set; }
         public IList<string> Parents { get; set; }
         public string MimeType { get; set; }
+        public List<User> owners { get; set; }
+        public string ThumbnailLink { get; set; }
+        public string FileExtensions { get; set; }
+    }
+    public class User
+    {
+        public string DisplayName { get; set; }
+        public string EmailAddress { get; set; }
+
     }
 }

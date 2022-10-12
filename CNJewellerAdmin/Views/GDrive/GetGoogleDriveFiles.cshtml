@@ -5,103 +5,6 @@
 }
 
 <style type="text/css">
-    table.imagetable {
-        font-family: verdana,arial,sans-serif;
-        font-size: 11px;
-        color: #333333;
-        border-width: 1px;
-        border-color: #999999;
-        border-collapse: collapse;
-    }
-
-        table.imagetable th {
-            background: #b5cfd2 url('cell-blue.jpg');
-            border-width: 1px;
-            padding: 8px;
-            border-style: solid;
-            border-color: #999999;
-        }
-
-        table.imagetable td {
-            /*background: #dcddc0 url('cell-grey.jpg');*/
-            border-width: 1px;
-            padding: 8px;
-            border-style: solid;
-            border-color: #999999;
-        }
-</style>
-<center>
-    <br><br>
-    @if (Model.Count() > 0)
-    {
-        <table class="imagetable">
-            <tr>
-                <th>
-                    <label>Name</label>
-                </th>
-                <th>
-                    <label>Size</label>
-                </th>
-                <th>
-                    <label>Version</label>
-                </th>
-                <th>
-                    Created Time
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                string FileSize = string.Empty;
-                string Type = string.Empty;
-                if (@item.Size != null)
-                {
-                    long? KiloByte = @item.Size;
-                    FileSize = KiloByte + " bytes";
-                }
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @FileSize
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Version)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedTime)
-                    </td>
-                </tr>
-            }
-        </table>
-    }
-    else
-    {
-        <table class="imagetable">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Size)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Version)
-                </th>
-                <th>
-                    Created Time
-                </th>
-            </tr>
-            <tr><td colspan="4">No records found</td></tr>
-        </table>
-    }
-
-    @Html.ActionLink("Back", "GetGoogleDriveFiles")
-</center>
-
-
-<style type="text/css">
     .inbox-rightbar {
         margin: 0px !important;
         border-left: 0px !important;
@@ -149,8 +52,6 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <h5 class="mb-3">Recent</h5>
-
                                     <div class="table-responsive">
                                         <table class="table table-centered table-nowrap mb-0">
                                             <thead class="thead-light">
@@ -164,93 +65,62 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="border-0">
-                                                        <i data-feather="folder" class="icon-dual"></i>
-                                                        <span class="ml-2 font-weight-medium"><a href="javascript: void(0);" class="text-reset">App Design & Development</a></span>
-                                                    </td>
-                                                    <td class="border-0">
-                                                        <p class="mb-0">Jan 03, 2020</p>
-                                                        <span class="font-12">by Andrew</span>
-                                                    </td>
-                                                    <td class="border-0">128 MB</td>
-                                                    <td class="border-0">
-                                                        Danielle Thompson
-                                                    </td>
-                                                    <td class="border-0">
-                                                        <div class="avatar-group">
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mat Helme">
-                                                                <img src="../assets/images/users/user-1.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty">
-                                                                <img src="../assets/images/users/user-2.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="James Anderson">
-                                                                <img src="../assets/images/users/user-3.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Username">
-                                                                <img src="../assets/images/users/user-5.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td class="border-0">
-                                                        <div class="btn-group dropdown">
-                                                            <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-share-variant mr-2 text-muted vertical-middle"></i>Share</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-link mr-2 text-muted vertical-middle"></i>Get Sharable Link</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-pencil mr-2 text-muted vertical-middle"></i>Rename</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-download mr-2 text-muted vertical-middle"></i>Download</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-delete mr-2 text-muted vertical-middle"></i>Remove</a>
+                                                @foreach (var item in Model)
+                                                {
+                                                    string FileSize = string.Empty;
+                                                    string Type = string.Empty;
+                                                    if (@item.Size != null)
+                                                    {
+                                                        long? KiloByte = @item.Size;
+                                                        FileSize = KiloByte + " bytes";
+                                                    }
+                                                    <tr>
+                                                        <td class="border-0">
+                                                            @if (@item.MimeType == "application/vnd.google-apps.folder")
+                                                            {
+                                                                <i data-feather="folder" class="icon-folder"></i>
+                                                            }
+                                                            else if (@item.MimeType == "application/zip")
+                                                            {
+                                                                <i data-feather="archive" class="icon-archive"></i>
+                                                            }
+                                                            else if (@item.MimeType == "image/png")
+                                                            {
+                                                                <i data-feather="image" class="icon-image"></i>
+                                                            }
+                                                            else if (@item.MimeType == "text/x-sql")
+                                                            {
+                                                                <i data-feather="database" class="icon-database"></i>
+                                                            }
+                                                            else 
+                                                            {
+                                                                <i data-feather="file" class="icon-file"></i>
+                                                            }
+                                                            <span class="ml-2 font-weight-medium"><a href="javascript: void(0);" class="text-reset">@item.Name</a></span>
+                                                        </td>
+                                                        <td class="border-0">
+                                                            <p class="mb-0">@item.CreatedTime</p>
+                                                            <span class="font-12">Testing</span>
+                                                        </td>
+                                                        <td class="border-0">@item.Size</td>
+                                                        <td class="border-0">
+                                                           Testing
+                                                        </td>
+                                                        <td class="border-0">
+                                                            <div class="btn-group dropdown">
+                                                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-share-variant mr-2 text-muted vertical-middle"></i>Share</a>
+                                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-link mr-2 text-muted vertical-middle"></i>Get Sharable Link</a>
+                                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-pencil mr-2 text-muted vertical-middle"></i>Rename</a>
+                                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-download mr-2 text-muted vertical-middle"></i>Download</a>
+                                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-delete mr-2 text-muted vertical-middle"></i>Remove</a>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                        </td>
+                                                    </tr>
+                                                }
 
-                                                <tr>
-                                                    <td>
-                                                        <i data-feather="file" class="icon-dual"></i>
-                                                        <span class="ml-2 font-weight-medium"><a href="javascript: void(0);" class="text-reset">Ubold-sketch-design.zip</a></span>
-                                                    </td>
-                                                    <td>
-                                                        <p class="mb-0">Feb 13, 2020</p>
-                                                        <span class="font-12">by Coderthemes</span>
-                                                    </td>
-                                                    <td>521 MB</td>
-                                                    <td>
-                                                        Coder Themes
-                                                    </td>
-                                                    <td>
-                                                        <div class="avatar-group">
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mat Helme">
-                                                                <img src="../assets/images/users/user-4.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Michael Zenaty">
-                                                                <img src="../assets/images/users/user-1.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-
-                                                            <a href="javascript: void(0);" class="avatar-group-item mb-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="James Anderson">
-                                                                <img src="../assets/images/users/user-6.jpg" class="rounded-circle avatar-xs" alt="friend">
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group dropdown">
-                                                            <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-share-variant mr-2 text-muted vertical-middle"></i>Share</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-link mr-2 text-muted vertical-middle"></i>Get Sharable Link</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-pencil mr-2 text-muted vertical-middle"></i>Rename</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-download mr-2 text-muted vertical-middle"></i>Download</a>
-                                                                <a class="dropdown-item" href="#"><i class="mdi mdi-delete mr-2 text-muted vertical-middle"></i>Remove</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
 
                                             </tbody>
                                         </table>

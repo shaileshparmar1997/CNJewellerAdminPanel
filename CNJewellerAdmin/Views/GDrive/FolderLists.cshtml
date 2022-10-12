@@ -41,15 +41,6 @@
                         <div class="card-box">
 
                             <div class="inbox-rightbar">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <form class="search-bar">
-                                        <div class="position-relative">
-                                            <input type="text" class="form-control form-control-light" placeholder="Search files...">
-                                            <span class="mdi mdi-magnify"></span>
-                                        </div>
-                                    </form>
-                                </div>
-
                                 <div class="mt-3">
                                     <div class="row mx-n1 no-gutters">
 
@@ -67,8 +58,8 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <div class="col pl-0">
-                                                                <a href="@item.Id" class="text-muted font-weight-medium">@item.Name</a>
+                                                            <div class="col pl-0 ">
+                                                                <button class="font-weight-medium" id="getFolderData" data-id="@item.Id" style="border:none;background:none;color:#949292">@item.Name</button>
                                                                 <p class="mb-0 font-13">@item.Size</p>
                                                             </div>
                                                         </div> <!-- end row -->
@@ -78,9 +69,6 @@
                                         }
                                     </div> <!-- end row-->
                                 </div> <!-- end .mt-3-->
-
-
-
                             </div>
                             <!-- end inbox-rightbar-->
 
@@ -94,4 +82,36 @@
 
         </div>
     </div>
+}
+@section Scripts{
+    <script type="text/javascript">
+
+        //$(".getFolderData").on("click", function () {
+        //    debugger
+        //    var folderId = $(this).attr('data-id');
+        //    $.ajax({
+        //        url: '@Url.Action("GetContainsInFolder", "GDrive")',
+        //        type: 'POST',
+        //        data: { 'folderId': folderId },
+        //        dataType: 'html',
+        //        success: function (data) {
+
+        //        },
+        //        error: function (e, v) {
+        //            alert("error in getting data");
+        //        }
+        //    });
+
+        //});
+
+        $(document).on('click', '#getFolderData', function () {
+            debugger;
+            var folderId = $(this).attr('data-id');
+   
+            var url = "/GDrive/GetContainsInFolder?folderId=" + folderId;
+            window.location.href = url;
+
+
+        });
+    </script>
 }

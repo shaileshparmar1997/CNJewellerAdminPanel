@@ -1,0 +1,111 @@
+﻿@model IEnumerable<CNJewellerAdmin.Models.GoogleDriveFileNew>
+@{
+    ViewData["Title"] = "GetContainsInFolder";
+}
+
+<style type="text/css">
+    .inbox-rightbar {
+        margin: 0px !important;
+        border-left: 0px !important;
+        padding: 1.5rem 0 1.5rem 25px;
+    }
+</style>
+
+<div id="wrapper">
+    <div class="content">
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                                <li class="breadcrumb-item active">File Manager</li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Sub Drive Manager</h4>
+                    </div>
+                    <div class="mt-1 mb-1" style="float:right">
+                        <button class="btn btn-primary">Share</button>
+                        <button class="btn btn-info" id="selectAll">All Select</button>
+                        <button class="btn btn-danger" id="removeAll">Clear</button>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+
+                <!-- Right Sidebar -->
+                <div class="col-12">
+                    <div class="card-box">
+
+                        <div class="inbox-rightbar">
+
+                            <div class="mt-1">
+
+
+                                @if (Model.Count() > 0)
+                                {
+                                    <div class="row">
+                                        @foreach (var item in Model)
+                                        {
+
+                                            @if (@item.MimeType == "image/png")
+                                            {
+                                                <div class="col-md-3 filter-item all graphic photography">
+                                                    <div class="gal-box">
+                                                        <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2" >
+                                                            <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:250px">
+                                                        </a>
+                                                        <div class="gall-info row">
+                                                            <h4 class="col-md-10 font-16 mt-0">@item.Name</h4>
+                                                            <div class="col-md-2">
+                                                                <input type="checkbox" class="checkhour" />
+                                                            </div>
+
+                                                        </div> <!-- gallery info -->
+                                                    </div> <!-- end gal-box -->
+                                                </div> <!-- end col -->
+                                            }
+                                        }
+
+                                    </div>
+                                }
+
+
+                                <!-- end .mt-3-->
+
+                            </div>
+                            <!-- end inbox-rightbar-->
+                        </div> <!-- end card-box -->
+
+                    </div> <!-- end Col -->
+                </div><!-- End row -->
+
+            </div> <!-- container -->
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var clicked = false;
+
+        $(document).on('click', '#selectAll', function () {
+            $(".checkhour").prop("checked", true);
+        });
+
+
+        $(document).on('click', '#removeAll', function () {
+            $(".checkhour").prop("checked", false);
+        });
+
+
+    </script>
+}
