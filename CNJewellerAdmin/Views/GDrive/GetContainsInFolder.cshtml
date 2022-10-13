@@ -7,7 +7,7 @@
     .inbox-rightbar {
         margin: 0px !important;
         border-left: 0px !important;
-        padding: 1.5rem 0 1.5rem 25px;
+        padding: 0.5rem 0 1.5rem 25px;
     }
 </style>
 
@@ -26,85 +26,322 @@
                                 <li class="breadcrumb-item active">File Manager</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Sub Drive Manager</h4>
+                        <h4 class="page-title ">Sub Drive Manager</h4>
                     </div>
                     <div class="mt-1 mb-1" style="float:right">
-                        <button class="btn btn-primary">Share</button>
-                        <button class="btn btn-info" id="selectAll">All Select</button>
-                        <button class="btn btn-danger" id="removeAll">Clear</button>
+                        <button class="btn btn-primary openDrive" data-toggle="modal" data-target="#openDrive">Share</button>
                     </div>
                 </div>
             </div>
             <!-- end page title -->
+            @if (Model.Count() > 0)
+            {
+                <div class="row">
 
-            <div class="row">
+                    <!-- Right Sidebar -->
+                    <div class="col-12">
+                        <div class="card-box">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="page-title-box">
+                                        <div style="float:right">
+                                            <button class="btn btn-info" id="selectAllFolder">All Select</button>
+                                            <button class="btn btn-danger" id="removeAllFolder">Clear</button>
+                                        </div>
+                                        <h4 class="page-title-left  ml-3">Folder</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inbox-rightbar">
 
-                <!-- Right Sidebar -->
-                <div class="col-12">
-                    <div class="card-box">
-
-                        <div class="inbox-rightbar">
-
-                            <div class="mt-1">
-
-
-                                @if (Model.Count() > 0)
-                                {
+                                <div class="mt-1">
                                     <div class="row">
                                         @foreach (var item in Model)
                                         {
+                                            @if (@item.MimeType == "application/vnd.google-apps.folder")
+                                            {
+                                                <input type="hidden" id="@item.Id" />
+                                                <input type="hidden" id="@item.MimeType" />
+                                                <div class="col-xl-3 col-lg-6">
+                                                    <div class="card m-1 shadow-none border">
+                                                        <div class="p-2" style="word-break:break-word">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-auto">
+                                                                    <div class="avatar-lg">
+                                                                        <span class="avatar-title bg-light text-secondary rounded">
+                                                                            <i data-feather="folder" class="icon-folder"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col pl-0">
+                                                                    <a href="@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
+                                                                </div>
+                                                                <div class="col pl-0">
+                                                                    <input type="checkbox" class="FolderCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" style="float:right" />
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                        </div> <!-- end .p-2-->
+                                                    </div> <!-- end col -->
+                                                </div> <!-- end col-->
+                                            }
+                                        }
+                                    </div>
 
-                                            @if (@item.MimeType == "image/png")
+                                </div>
+                                <!-- end inbox-rightbar-->
+                            </div> <!-- end card-box -->
+
+                        </div> <!-- end Col -->
+
+                        <div class="card-box">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="page-title-box">
+                                        <div style="float:right">
+                                            <button class="btn btn-info" id="selectAllImage">All Select</button>
+                                            <button class="btn btn-danger" id="removeAllImage">Clear</button>
+                                        </div>
+                                        <h4 class="page-title-left ml-3">Images </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="inbox-rightbar">
+
+                                <div class="mt-1">
+
+                                    <div class="row">
+                                        @foreach (var item in Model)
+                                        {
+                                            @if (@item.MimeType == "image/png" || @item.MimeType == "image/jpeg" || @item.MimeType == "image/gif" || @item.MimeType == "image/jpeg")
                                             {
                                                 <div class="col-md-3 filter-item all graphic photography">
                                                     <div class="gal-box">
-                                                        <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2" >
-                                                            <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:250px">
+                                                        <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2">
+                                                            <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:250px" 8>
                                                         </a>
                                                         <div class="gall-info row">
-                                                            <h4 class="col-md-10 font-16 mt-0">@item.Name</h4>
-                                                            <div class="col-md-2">
-                                                                <input type="checkbox" class="checkhour" />
+                                                            <div class="col-md-8">
+                                                                <h4 class="font-16 mt-0">@item.Name</h4>
                                                             </div>
-
+                                                            <div class="col-md-2">
+                                                                <i data-feather="download" class="icon-download"></i>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input type="checkbox" class="ImageCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" />
+                                                            </div>
                                                         </div> <!-- gallery info -->
                                                     </div> <!-- end gal-box -->
                                                 </div> <!-- end col -->
                                             }
                                         }
-
                                     </div>
+                                    @* <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                @if (@item.MimeType == "application/zip")
+                                {
+                                <div class="col-xl-3 col-lg-6">
+                                <div class="card m-1 shadow-none border">
+                                <div class="p-2" style="word-break:break-word">
+                                <div class="row align-items-center">
+                                <div class="col-auto">
+                                <div class="avatar-lg">
+                                <span class="avatar-title bg-light text-secondary rounded">
+                                <i data-feather="archive" class="icon-archive"></i>
+                                </span>
+                                </div>
+                                </div>
+                                <div class="col pl-0">
+                                <a href="@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
+                                </div>
+                                </div> <!-- end row -->
+                                </div> <!-- end .p-2-->
+                                </div> <!-- end col -->
+                                </div> <!-- end col-->
                                 }
+                                }
+                                </div>
+
+                                <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                @if (@item.MimeType == "text/x-sql")
+                                {
+                                <div class="col-xl-3 col-lg-6">
+                                <div class="card m-1 shadow-none border">
+                                <div class="p-2" style="word-break:break-word">
+                                <div class="row align-items-center">
+                                <div class="col-auto">
+                                <div class="avatar-lg">
+                                <span class="avatar-title bg-light text-secondary rounded">
+                                <i data-feather="database" class="icon-database"></i>
+                                </span>
+                                </div>
+                                </div>
+                                <div class="col pl-0">
+                                <a href="@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
+                                </div>
+                                </div> <!-- end row -->
+                                </div> <!-- end .p-2-->
+                                </div> <!-- end col -->
+                                </div> <!-- end col-->
+                                }
+                                }
+                                </div>
+
+                                <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                @if (@item.MimeType != "text/x-sql" && @item.MimeType != "text/x-sql" && @item.MimeType != "application/zip" && @item.MimeType != "application/vnd.google-apps.folder" &&
+                                @item.MimeType != "image/png" || @item.MimeType != "image/jpeg" || @item.MimeType != "image/gif" || @item.MimeType != "image/jpg")
+                                {
+                                <div class="col-xl-3 col-lg-6">
+                                <div class="card m-1 shadow-none border">
+                                <div class="p-2" style="word-break:break-word">
+                                <div class="row align-items-center">
+                                <div class="col-auto">
+                                <div class="avatar-lg">
+                                <span class="avatar-title bg-light text-secondary rounded">
+                                <i data-feather="file" class="icon-file"></i>
+                                </span>
+                                </div>
+                                </div>
+                                <div class="col pl-0">
+                                <a href="@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
+                                </div>
+                                </div> <!-- end row -->
+                                </div> <!-- end .p-2-->
+                                </div> <!-- end col -->
+                                </div> <!-- end col-->
+                                }
+                                }
+                                </div>*@
+
+                                    <!-- end .mt-3-->
+
+                                </div>
+                                <!-- end inbox-rightbar-->
+                            </div> <!-- end card-box -->
+
+                        </div> <!-- end Col -->
 
 
-                                <!-- end .mt-3-->
 
-                            </div>
-                            <!-- end inbox-rightbar-->
-                        </div> <!-- end card-box -->
 
-                    </div> <!-- end Col -->
-                </div><!-- End row -->
+                    </div><!-- End row -->
 
-            </div> <!-- container -->
+                </div> <!-- container -->
+            }
 
         </div>
     </div>
 
 </div>
 
+<!-- Signup modal content -->
+<div id="entryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="entryDiv"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success font-weight-bold " id="saveRecord">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script type="text/javascript">
         var clicked = false;
 
-        $(document).on('click', '#selectAll', function () {
-            $(".checkhour").prop("checked", true);
+        $(document).on('click', '#selectAllImage', function () {
+            $(".ImageCheck").prop("checked", true);
+        });
+        $(document).on('click', '#removeAllImage', function () {
+            $(".ImageCheck").prop("checked", false);
+        });
+
+        $(document).on('click', '#selectAllFolder', function () {
+            $(".FolderCheck").prop("checked", true);
+        });
+        $(document).on('click', '#removeAllFolder', function () {
+            $(".FolderCheck").prop("checked", false);
         });
 
 
-        $(document).on('click', '#removeAll', function () {
-            $(".checkhour").prop("checked", false);
+        //open model
+        $(document).on('click', '.openDrive', function () {
+            debugger;
+            var sharedItems = [];
+            var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
+            $.each(getCheck, function () {
+                var sharedItem = {
+                    SharedData: $(this).attr("data-id"),
+                    Name: $(this).attr("data-name"),
+                    ThumbnailLink: $(this).attr("data-thumbnailLink"),
+                    MIMEType: $(this).attr("data-mimeType")
+                };
+                sharedItems.push(sharedItem);
+            });
+
+            var request = {
+                sharedItems: sharedItems
+            };
+
+            $.ajax({
+                url: '/GDrive/OpenDrive',
+                type: 'POST',
+                data: { 'request': request },
+                dataType: 'html',
+                success: function (data) {
+                    $("#entryDiv").html(data);
+                    $("#entryModal").modal('show');
+                    $(".flatpickr").flatpickr({ enableTime: !0, dateFormat: "d-m-Y H:i" });
+                },
+                error: function (e, v) {
+                    alert("error while opening model");
+                }
+            });
         });
+
+
+        //saved
+        $(document).on('click', '#saveRecord', function () {
+            debugger;
+            var sharedItems = [];
+            var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
+            $.each(getCheck, function () {
+                var sharedItem = {
+                    SharedData: $(this).attr("data-id"),
+                    Name: $(this).attr("data-name"),
+                    ThumbnailLink: $(this).attr("data-thumbnailLink"),
+                    MIMEType: $(this).attr("data-mimeType"),
+                };
+                sharedItems.push(sharedItem);
+            });
+
+            var request = {
+                UserName: $("#userName").val(),
+                Mobile: $("#mobile").val(),
+                ExpiryTime: $("#expiryTime").val(),
+                sharedItems: sharedItems
+            };
+
+            $.ajax({
+                url: '/GDrive/SaveDrive',
+                type: 'POST',
+                data: { 'request': request },
+                dataType: 'json',
+                success: function (data) {
+                    alert("success");
+                },
+                error: function (e, v) {
+                    alert("error while opening model");
+                }
+            });
+        });
+
 
 
     </script>

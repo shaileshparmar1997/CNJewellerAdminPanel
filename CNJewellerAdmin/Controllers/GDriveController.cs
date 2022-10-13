@@ -1,8 +1,13 @@
-﻿using CNJewellerAdmin.Helper.GDrive;
+﻿using CNJewellerAdmin.DTOs.Base;
+using CNJewellerAdmin.Helper.DateUtil;
+using CNJewellerAdmin.Helper;
+using CNJewellerAdmin.Helper.GDrive;
 using CNJewellerAdmin.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using CNJewellerAdmin.Model;
 
 namespace CNJewellerAdmin.Controllers
 {
@@ -63,7 +68,61 @@ namespace CNJewellerAdmin.Controllers
             //Response.Flush();
         }
 
+        [HttpPost]
+        public ActionResult OpenDrive(DriveFilesDTO request)
+        {
+            return PartialView("~/Views/GDrive/_filesData.cshtml", request);
+        }
 
+        [HttpPost]
+        public async Task<JsonResult> SaveDrive(CreateDriveFilesRequest request)
+        {
+            BaseResponse response = new BaseResponse();
+            if (request != null)
+            {
+                try
+                {
+                    using (var db = new CNJContext())
+                    {
+                        DriveFile drivesDetail = new DriveFile();
+                        drivesDetail.SharedGuid = Guid.NewGuid();
+                        drivesDetail.UserName = request.UserName;
+                        drivesDetail.Mobile = request.Mobile;
+                        drivesDetail.ExpiryTime = DateUtil.GetDateTimeFromString(request.ExpiryTime);
+                        drivesDetail.CreatedBy = 1;
+                        drivesDetail.CreatedDate = DateTime.Now;
+                        drivesDetail.IsActive = true;
+                        await db.DriveFiles.AddAsync(drivesDetail);
+                        foreach (var item in request.sharedItems)
+                        {
+                            var subData = new ShareDatum
+                            {
+                                SharedData = item.SharedData,
+                                Name = item.Name,
+                                Mimetype = item.Mimetype,
+                                ThumbnailLink = item.ThumbnailLink,
+                            };
+                            await db.ShareData.AddAsync(subData);
+                        }
+                        await db.SaveChangesAsync();
+                        response.Acknowledge = Helper.AcknowledgeType.Success;
+                        response.Message = "Successfully create new Drive Files";
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    response.Acknowledge = Helper.AcknowledgeType.Failure;
+                    response.Message = ex.Message;
+                }
+            }
+            else
+            {
+                response.Acknowledge = Helper.AcknowledgeType.Failure;
+                response.Message = "Request is not valid";
+            }
+            return Json(response);
+        }
 
         public IActionResult GetContainsInFolder(string folderId)
         {
@@ -83,7 +142,7 @@ namespace CNJewellerAdmin.Controllers
         [HttpPost]
         public ActionResult FileUploadInFolder(GoogleDriveFileNew FolderId, IFormFile file)
         {
-           // _GDriveHelper.FileUploadInFolder(FolderId.Id, file);
+            // _GDriveHelper.FileUploadInFolder(FolderId.Id, file);
             return RedirectToAction("GetGoogleDriveFiles1");
         }
 
@@ -96,7 +155,7 @@ namespace CNJewellerAdmin.Controllers
 
             foreach (GoogleDriveFileNew EachFolder in AllFolders)
             {
-                obj.Add(new DDLOptions { Id = EachFolder.Id, Name = EachFolder.Name, Size = EachFolder.Size});
+                obj.Add(new DDLOptions { Id = EachFolder.Id, Name = EachFolder.Name, Size = EachFolder.Size });
             }
             return View(obj);
         }
