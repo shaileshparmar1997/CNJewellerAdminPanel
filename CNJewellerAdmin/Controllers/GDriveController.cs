@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using CNJewellerAdmin.Model;
+using System.Globalization;
 
 namespace CNJewellerAdmin.Controllers
 {
@@ -74,10 +75,10 @@ namespace CNJewellerAdmin.Controllers
             return PartialView("~/Views/GDrive/_filesData.cshtml", request);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<JsonResult> SaveDrive(CreateDriveFilesRequest request)
         {
-            BaseResponse response = new BaseResponse();
+            CreateDriveFilesResponse response = new CreateDriveFilesResponse();
             if (request != null)
             {
                 try
@@ -88,7 +89,7 @@ namespace CNJewellerAdmin.Controllers
                         drivesDetail.SharedGuid = Guid.NewGuid();
                         drivesDetail.UserName = request.UserName;
                         drivesDetail.Mobile = request.Mobile;
-                        drivesDetail.ExpiryTime = DateUtil.GetDateTimeFromString(request.ExpiryTime);
+                        drivesDetail.ExpiryTime = DateUtil.GetStringTODate(request.ExpiryTime);
                         drivesDetail.CreatedBy = 1;
                         drivesDetail.CreatedDate = DateTime.Now;
                         drivesDetail.IsActive = true;
@@ -105,6 +106,7 @@ namespace CNJewellerAdmin.Controllers
                             await db.ShareData.AddAsync(subData);
                         }
                         await db.SaveChangesAsync();
+                        response.SharedData = drivesDetail.SharedGuid;
                         response.Acknowledge = Helper.AcknowledgeType.Success;
                         response.Message = "Successfully create new Drive Files";
 
@@ -120,6 +122,28 @@ namespace CNJewellerAdmin.Controllers
             {
                 response.Acknowledge = Helper.AcknowledgeType.Failure;
                 response.Message = "Request is not valid";
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult GetSharedData(Guid SharedId)
+        {
+            CreateDriveFilesRequest response = new CreateDriveFilesRequest();
+            try
+            {
+                using (var db = new CNJContext())
+                {
+                    var sharedData = db.DriveFiles.FirstOrDefault(x => x.SharedGuid == SharedId && x.IsActive == true);
+
+                    response.SharedGuid = sharedData.SharedGuid;
+                    response.UserName = sharedData.UserName;
+                    response.Mobile = sharedData.Mobile;
+                    response.ExpiryTime = sharedData.ExpiryTime.ToString("d-m-yy HH:mm");
+                }
+            }
+            catch (Exception ex)
+            {
             }
             return Json(response);
         }

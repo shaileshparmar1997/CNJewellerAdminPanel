@@ -94,6 +94,12 @@ namespace CNJewellerAdmin.Helper.DateUtil
             return result ? parsedDate : null;
         }
 
+
+        public static DateTime GetStringTODate(string stringDate)
+        {
+            return DateTime.ParseExact(stringDate, "d-M-yyyy HH:mm", CultureInfo.InvariantCulture);
+        }
+
         public static string GetDateString(DateTime? date)
         {
             if (date != null)

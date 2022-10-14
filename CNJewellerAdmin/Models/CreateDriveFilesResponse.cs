@@ -1,6 +1,9 @@
-﻿namespace CNJewellerAdmin.Models
+﻿using CNJewellerAdmin.DTOs.Base;
+
+namespace CNJewellerAdmin.Models
 {
-    public class CreateDriveFilesResponse
+    public class CreateDriveFilesResponse : BaseResponse
     {
+        public Guid? SharedData { get; set; }
     }
 }

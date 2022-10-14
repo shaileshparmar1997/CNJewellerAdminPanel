@@ -334,6 +334,10 @@
                 data: { 'request': request },
                 dataType: 'json',
                 success: function (data) {
+                    var abc = data.SharedData;
+                    window.location.heref="GDrive/GetSharedData?SharedId="+abc;
+                    debugger;
+                    console.log(data);
                     alert("success");
                 },
                 error: function (e, v) {
