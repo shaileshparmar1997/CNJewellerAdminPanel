@@ -320,25 +320,22 @@
                 };
                 sharedItems.push(sharedItem);
             });
-
             var request = {
                 UserName: $("#userName").val(),
                 Mobile: $("#mobile").val(),
                 ExpiryTime: $("#expiryTime").val(),
                 sharedItems: sharedItems
             };
-
+            var sharedId;
             $.ajax({
                 url: '/GDrive/SaveDrive',
                 type: 'POST',
                 data: { 'request': request },
                 dataType: 'json',
                 success: function (data) {
-                    var abc = data.SharedData;
-                    window.location.heref="GDrive/GetSharedData?SharedId="+abc;
                     debugger;
-                    console.log(data);
-                    alert("success");
+                    sharedId = data.sharedData;
+                    getSharedData(sharedId);
                 },
                 error: function (e, v) {
                     alert("error while opening model");
@@ -346,7 +343,22 @@
             });
         });
 
-
+        function getSharedData(sharedId) {
+            debugger;
+            $.ajax({
+                url: '/GDrive/GetSharedData',
+                type: 'POST',
+                data: { 'sharedId': sharedId },
+                dataType: 'html',
+                success: function (data) {
+                    $("#entryDiv").html(data);
+                    $("#entryModal").modal('show');
+                },
+                error: function (e, v) {
+                    alert("error while opening model");
+                }
+            });
+        }
 
     </script>
 }

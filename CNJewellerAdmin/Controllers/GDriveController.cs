@@ -75,7 +75,7 @@ namespace CNJewellerAdmin.Controllers
             return PartialView("~/Views/GDrive/_filesData.cshtml", request);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<JsonResult> SaveDrive(CreateDriveFilesRequest request)
         {
             CreateDriveFilesResponse response = new CreateDriveFilesResponse();
@@ -127,25 +127,33 @@ namespace CNJewellerAdmin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetSharedData(Guid SharedId)
+        public ActionResult GetSharedData(Guid sharedId)
         {
-            CreateDriveFilesRequest response = new CreateDriveFilesRequest();
+            DriveFilesDTO response = new DriveFilesDTO();
             try
             {
                 using (var db = new CNJContext())
                 {
-                    var sharedData = db.DriveFiles.FirstOrDefault(x => x.SharedGuid == SharedId && x.IsActive == true);
-
-                    response.SharedGuid = sharedData.SharedGuid;
-                    response.UserName = sharedData.UserName;
-                    response.Mobile = sharedData.Mobile;
-                    response.ExpiryTime = sharedData.ExpiryTime.ToString("d-m-yy HH:mm");
+                    var sharedData = db.DriveFiles.FirstOrDefault(x => x.SharedGuid == sharedId && x.IsActive == true);
+                    if (sharedData != null)
+                    {
+                        response.SharedGuid = sharedData.SharedGuid;
+                        response.UserName = sharedData.UserName;
+                        response.Mobile = sharedData.Mobile;
+                        response.ExpiryTime = sharedData.ExpiryTime.ToString("d-m-yy HH:mm");
+                        response.CurrentDateTime = DateTime.Now.ToString("d-m-yy HH:mm");
+                    }
+                    else
+                    {
+                        response.Acknowledge = AcknowledgeType.Failure;
+                        response.Message = "No record found";
+                    }
                 }
             }
             catch (Exception ex)
             {
             }
-            return Json(response);
+            return PartialView("~/Views/GDrive/_getSharedList.cshtml",response);
         }
 
         public IActionResult GetContainsInFolder(string folderId)

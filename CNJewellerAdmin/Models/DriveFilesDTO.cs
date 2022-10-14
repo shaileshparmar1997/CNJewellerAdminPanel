@@ -1,10 +1,15 @@
-﻿namespace CNJewellerAdmin.Models
+﻿using CNJewellerAdmin.DTOs.Base;
+
+namespace CNJewellerAdmin.Models
 {
-    public class DriveFilesDTO
+    public class DriveFilesDTO : BaseResponse
     {
+        public Guid? SharedGuid { get; set; }
         public string UserName { get; set; }
         public int Mobile { get; set; }
-        public DateTime ExpiryTime { get; set; }
+        public string ExpiryTime { get; set; }
+        public string CurrentDateTime { get; set; }
+        public string CountDays { get; set; }
         public List<SharedItem> sharedItems { get; set; }
       
     }
