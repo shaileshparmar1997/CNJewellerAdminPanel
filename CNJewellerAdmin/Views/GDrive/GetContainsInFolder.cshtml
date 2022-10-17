@@ -62,7 +62,7 @@
                                             {
                                                 <input type="hidden" id="@item.Id" />
                                                 <input type="hidden" id="@item.MimeType" />
-                                                <div class="col-xl-3 col-lg-6">
+                                                <div class="col-xl-3 col-lg-4">
                                                     <div class="card m-1 shadow-none border">
                                                         <div class="p-2" style="word-break:break-word">
                                                             <div class="row align-items-center">
@@ -124,11 +124,11 @@
                                                             <div class="col-md-8">
                                                                 <h4 class="font-16 mt-0">@item.Name</h4>
                                                             </div>
-                                                            <div class="col-md-2">
+                                                            <a class="col-md-2" href="@item.WebContentLink">
                                                                 <i data-feather="download" class="icon-download"></i>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input type="checkbox" class="ImageCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" />
+                                                            </a>
+                                                            <div class="col-md-2" style="padding-top:4px">
+                                                                <input type="checkbox"  class="ImageCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" />
                                                             </div>
                                                         </div> <!-- gallery info -->
                                                     </div> <!-- end gal-box -->
@@ -239,7 +239,7 @@
 
 </div>
 
-<!-- Signup modal content -->
+<!-- Form modal content -->
 <div id="entryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -251,8 +251,22 @@
         </div>
     </div>
 </div>
+
+<!-- Data record modal content -->
+<div id="entryModal1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full-width">
+        <div class="modal-content">
+            <div id="entryDiv1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success font-weight-bold " id="saveRecord">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script type="text/javascript">
+
         var clicked = false;
 
         $(document).on('click', '#selectAllImage', function () {
@@ -351,14 +365,28 @@
                 data: { 'sharedId': sharedId },
                 dataType: 'html',
                 success: function (data) {
-                    $("#entryDiv").html(data);
-                    $("#entryModal").modal('show');
+                    $("#entryModal").modal('hide');
+                    $("#entryDiv1").html(data);
+                    $("#entryModal1").modal('show');
                 },
                 error: function (e, v) {
                     alert("error while opening model");
                 }
             });
         }
+        function myFunction() {
+            var copyText = document.getElementById("myInput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
 
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+        }
+
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
     </script>
 }

@@ -19,9 +19,11 @@ namespace CNJewellerAdmin.Controllers
 
 
         private readonly IWebHostEnvironment _hostEnvironment;
-        public GDriveController(IWebHostEnvironment hostEnvironment)
+        private readonly IConfiguration _configuration;
+        public GDriveController(IWebHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             this._hostEnvironment = hostEnvironment;
+            this._configuration = configuration;
             _GDriveHelper = new GoogleDriveFilesRepository(hostEnvironment);
         }
 
@@ -98,10 +100,11 @@ namespace CNJewellerAdmin.Controllers
                         {
                             var subData = new ShareDatum
                             {
+                                SharedGuid = drivesDetail.SharedGuid,
                                 SharedData = item.SharedData,
                                 Name = item.Name,
                                 Mimetype = item.Mimetype,
-                                ThumbnailLink = item.ThumbnailLink,
+                                ThumbnailLink =!string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "",
                             };
                             await db.ShareData.AddAsync(subData);
                         }
@@ -109,7 +112,6 @@ namespace CNJewellerAdmin.Controllers
                         response.SharedData = drivesDetail.SharedGuid;
                         response.Acknowledge = Helper.AcknowledgeType.Success;
                         response.Message = "Successfully create new Drive Files";
-
                     }
                 }
                 catch (Exception ex)
@@ -140,8 +142,32 @@ namespace CNJewellerAdmin.Controllers
                         response.SharedGuid = sharedData.SharedGuid;
                         response.UserName = sharedData.UserName;
                         response.Mobile = sharedData.Mobile;
-                        response.ExpiryTime = sharedData.ExpiryTime.ToString("d-m-yy HH:mm");
-                        response.CurrentDateTime = DateTime.Now.ToString("d-m-yy HH:mm");
+                        response.ExpiryTime = sharedData.ExpiryTime.ToString("dd-MM-yyyy HH:mm");
+                        response.CurrentDateTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+                       TimeSpan ts = sharedData.ExpiryTime - DateTime.Now;
+                        var d = ts.Days;
+                        var h = ts.Hours;
+                        var m = ts.Minutes;
+                        var ms = ts.Milliseconds;
+
+                        response.ExpiryLimit = "Days:"+d + ", " + h + ":" + m + ":" + ms;
+
+                        var keyLink = _configuration["HostUrl"];
+                        response.Link = keyLink + "DrivesView/Index?sharedId=" + response.SharedGuid;
+
+                        var sharedList = db.ShareData.Where(x => x.SharedGuid == sharedId).ToList();
+                        response.sharedItems = new List<SharedItem>();
+                        foreach (var item in sharedList)
+                        {
+                            SharedItem list = new SharedItem();
+                            list.SharedGuid = item.SharedGuid;
+                            list.SharedData = item.SharedData;
+                            list.Name = item.Name;
+                            list.MIMEType = item.Mimetype;
+                            list.ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "";
+                            list.SharedGuid = item.SharedGuid;
+                            response.sharedItems.Add(list);
+                        }
                     }
                     else
                     {

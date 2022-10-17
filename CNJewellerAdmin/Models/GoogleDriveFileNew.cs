@@ -14,11 +14,11 @@ namespace CNJewellerAdmin.Models
         public List<User> owners { get; set; }
         public string ThumbnailLink { get; set; }
         public string FileExtensions { get; set; }
+        public string WebContentLink { get; set; }
     }
     public class User
     {
         public string DisplayName { get; set; }
         public string EmailAddress { get; set; }
-
     }
 }

@@ -109,7 +109,8 @@ namespace CNJewellerAdmin.Models
                         Parents = file.Parents,
                         MimeType = file.MimeType,
                         ThumbnailLink = file.ThumbnailLink,
-                        FileExtensions = file.FileExtension
+                        FileExtensions = file.FileExtension,
+                        WebContentLink = file.WebContentLink,
                     };
                     FileList.Add(File);
                 }

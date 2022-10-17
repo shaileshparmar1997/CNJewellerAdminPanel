@@ -24,7 +24,7 @@ namespace CNJewellerAdmin.Model
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=IAH1L3006\\SQLEXPRESS;;Database=CNJ;User Id=sa; password=ikart@3689");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-T8V3JVM\\SQLEXPRESS;Database=CNJ;User Id=sa;Password=ikart@123;Trusted_Connection=True;");
             }
         }
 
@@ -46,14 +46,16 @@ namespace CNJewellerAdmin.Model
             modelBuilder.Entity<ShareDatum>(entity =>
             {
                 entity.Property(e => e.Mimetype)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .HasColumnName("MIMEType");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.SharedData).HasMaxLength(50);
 
-                entity.Property(e => e.ThumbnailLink).HasMaxLength(50);
+                entity.Property(e => e.SharedGuid).HasColumnName("SharedGUID");
+
+                entity.Property(e => e.ThumbnailLink).HasMaxLength(1000);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -16,6 +16,7 @@
     }
     public class CreateSharedDataRequest
     {
+        public Guid? SharedGuid { get; set; }
         public string SharedData { get; set; }
         public string Name { get; set; } = null!;
         public string? ThumbnailLink { get; set; }

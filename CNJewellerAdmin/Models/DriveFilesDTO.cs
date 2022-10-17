@@ -9,12 +9,15 @@ namespace CNJewellerAdmin.Models
         public int Mobile { get; set; }
         public string ExpiryTime { get; set; }
         public string CurrentDateTime { get; set; }
+        public string ExpiryLimit { get; set; }
         public string CountDays { get; set; }
+        public string Link { get; set; }
         public List<SharedItem> sharedItems { get; set; }
       
     }
     public class SharedItem
     {
+        public Guid? SharedGuid { get; set; }
         public string SharedData { get; set; }
         public string Name { get; set; }
         public string ThumbnailLink { get; set; }
