@@ -506,7 +506,7 @@
                              <div class="card-box">                                
                                     <div class="mt-1">
                                         <div class="row">
-                                            @foreach (var item inModel.sharedItems)
+                                            @foreach (var item in Model.sharedItems)
                                             {
                                                 @if (@item.MIMEType == "image/png" || @item.MIMEType == "image/jpeg" || @item.MIMEType == "image/gif" || @item.MIMEType == "image/jpeg")
                                                 {

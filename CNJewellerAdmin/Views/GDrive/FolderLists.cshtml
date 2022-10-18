@@ -85,33 +85,16 @@
 }
 @section Scripts{
     <script type="text/javascript">
-
-        //$(".getFolderData").on("click", function () {
-        //    debugger
-        //    var folderId = $(this).attr('data-id');
-        //    $.ajax({
-        //        url: '@Url.Action("GetContainsInFolder", "GDrive")',
-        //        type: 'POST',
-        //        data: { 'folderId': folderId },
-        //        dataType: 'html',
-        //        success: function (data) {
-
-        //        },
-        //        error: function (e, v) {
-        //            alert("error in getting data");
-        //        }
-        //    });
-
-        //});
-
         $(document).on('click', '#getFolderData', function () {
-            debugger;
             var folderId = $(this).attr('data-id');
-   
             var url = "/GDrive/GetContainsInFolder?folderId=" + folderId;
             window.location.href = url;
+        });
 
-
+        $(document).on('click', '.deleteRow', function () {
+            debugger;
+            var shareId = $(this).attr('data-id');
+            $(this).closest('tr').remove();
         });
     </script>
 }
