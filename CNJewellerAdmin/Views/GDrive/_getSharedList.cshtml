@@ -6,88 +6,43 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="col-md-12">
-        <div class="row" style="border-bottom:1px solid grey">
-            <div class="col-md-4">
-                <label style="font-weight:bold">Name : </label>
-                <label>@Model.UserName</label>
-            </div>
-            <div class="col-md-4">
-                <label style="font-weight:bold">Mobile : </label>
-                <label>@Model.Mobile</label>
-            </div>
-            <div class="col-md-4">
-                <label style="font-weight:bold">Expiry Time :</label>
-                <label>@Model.ExpiryTime  - <label style="color:red;">@Model.ExpiryLimit</label></label>
-            </div>
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="userName" style="color:blue" class="col-md-3">Name : </label>
+            <label for="userName" class="col-md-9">@Model.UserName</label>
         </div>
     </div>
-    <br/>
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-8">
-                <input type="text" id="myInput" class="form-control" value="@Model.Link">
-            </div>
-            <div class="col-md-4">
-                <button onclick="myFunction()" class="btn btn-primary" onmouseout="outFunc()">Copy</button>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-12">
-            <div class="card-box">
-                <div class="row">
-                    @foreach (var item in Model.sharedItems)
-                    {
-                        @if (@item.MIMEType == "image/png" || @item.MIMEType == "image/jpeg" || @item.MIMEType == "image/gif" || @item.MIMEType == "image/jpeg")
-                        {
-                            <div class="col-md-3 filter-item all graphic photography">
-                                <div class="gal-box">
-                                    <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2">
-                                        <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:125px">
-                                    </a>
-                                    <div class="gall-info row" style="padding:5px 15px !important">
-                                        <div class="col-md-8">
-                                            <h4 class="font-16 mt-0">@item.Name</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
 
-            <div class="card-box">
-                <div class="row">
-                    @foreach (var item in Model.sharedItems)
-                    {
-                        @if (@item.MIMEType == "application/vnd.google-apps.folder")
-                        {
-                            <input type="hidden" id="@item.MIMEType" />
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="card m-1 shadow-none border">
-                                    <div class="p-2" style="word-break:break-word">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <div class="avatar-lg">
-                                                    <span class="avatar-title bg-light text-secondary rounded">
-                                                        <i data-feather="folder" class="icon-folder"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col pl-0">
-                                                <a href="@item.Name" class="text-muted font-weight-medium" data-id="@item.Name">@item.Name</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="mobile" style="color:blue" class="col-md-3">Mobile No : </label>
+            <label for="userName" class="col-md-9">@Model.Mobile</label>
         </div>
     </div>
+
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="expiryTime" style="color:blue" class="col-md-3">Expiry Time : </label>
+            <label for="userName" class="col-md-9">@Model.ExpiryTime</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-12 row">
+            <label for="expiryTime"style="color:blue"  class="col-md-3">Link : </label>
+            <input id="myInput" value="@Model.Link" type="text" class="form-control col-md-9" readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary myFunction mr-1">
+            <i class="mdi mdi-content-copy"></i>
+        </button>
+        <a class="btn btn-info  mr-1" href="https://api.whatsapp.com/send?text= '+@Model.Link+' &phone=918000737330">
+            <i class="mdi mdi-whatsapp"></i>
+        </a>
+        <a class="btn btn-warning" href="@Model.Link" target="_blank">
+            <i class="mdi mdi-web"></i>    
+        </a>
+    </div>
+
 </div>

@@ -148,26 +148,24 @@ namespace CNJewellerAdmin.Controllers
                         var d = ts.Days;
                         var h = ts.Hours;
                         var m = ts.Minutes;
-                        var ms = ts.Milliseconds;
 
-                        response.ExpiryLimit = "Days:"+d + ", " + h + ":" + m + ":" + ms;
+                        response.ExpiryLimit = "Days:" + d + ", " + h + ":" + m;
 
                         var keyLink = _configuration["HostUrl"];
                         response.Link = keyLink + "DrivesView/Index?sharedId=" + response.SharedGuid;
-
-                        var sharedList = db.ShareData.Where(x => x.SharedGuid == sharedId).ToList();
-                        response.sharedItems = new List<SharedItem>();
-                        foreach (var item in sharedList)
-                        {
-                            SharedItem list = new SharedItem();
-                            list.SharedGuid = item.SharedGuid;
-                            list.SharedData = item.SharedData;
-                            list.Name = item.Name;
-                            list.MIMEType = item.Mimetype;
-                            list.ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "";
-                            list.SharedGuid = item.SharedGuid;
-                            response.sharedItems.Add(list);
-                        }
+                        //var sharedList = db.ShareData.Where(x => x.SharedGuid == sharedId).ToList();
+                        //response.sharedItems = new List<SharedItem>();
+                        //foreach (var item in sharedList)
+                        //{
+                        //    SharedItem list = new SharedItem();
+                        //    list.SharedGuid = item.SharedGuid;
+                        //    list.SharedData = item.SharedData;
+                        //    list.Name = item.Name;
+                        //    list.MIMEType = item.Mimetype;
+                        //    list.ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "";
+                        //    list.SharedGuid = item.SharedGuid;
+                        //    response.sharedItems.Add(list);
+                        //}
                     }
                     else
                     {

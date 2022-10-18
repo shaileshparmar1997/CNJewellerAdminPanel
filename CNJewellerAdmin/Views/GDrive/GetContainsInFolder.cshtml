@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "GetContainsInFolder";
 }
-
+<link href="~/js/parsley/parsley.css" rel="stylesheet" />
 <style type="text/css">
     .inbox-rightbar {
         margin: 0px !important;
@@ -128,7 +128,7 @@
                                                                 <i data-feather="download" class="icon-download"></i>
                                                             </a>
                                                             <div class="col-md-2" style="padding-top:4px">
-                                                                <input type="checkbox"  class="ImageCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" />
+                                                                <input type="checkbox" class="ImageCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" />
                                                             </div>
                                                         </div> <!-- gallery info -->
                                                     </div> <!-- end gal-box -->
@@ -254,21 +254,19 @@
 
 <!-- Data record modal content -->
 <div id="entryModal1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-full-width">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div id="entryDiv1"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-danger font-weight-bold" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success font-weight-bold " id="saveRecord">Save</button>
             </div>
         </div>
     </div>
 </div>
+<script src="~/js/parsley/parsley.min.js"></script>
 @section Scripts{
     <script type="text/javascript">
-
         var clicked = false;
-
         $(document).on('click', '#selectAllImage', function () {
             $(".ImageCheck").prop("checked", true);
         });
@@ -287,6 +285,10 @@
         //open model
         $(document).on('click', '.openDrive', function () {
             debugger;
+            var currentdate = new Date();
+            var datetime = currentdate.getDate() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getFullYear() + " " + currentdate.getHours() + ":" + currentdate.getMinutes();
+            $("#expiryTime").val(datetime);
+
             var sharedItems = [];
             var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
             $.each(getCheck, function () {
@@ -311,6 +313,7 @@
                 success: function (data) {
                     $("#entryDiv").html(data);
                     $("#entryModal").modal('show');
+                    $("#expiryTime").val(datetime);
                     $(".flatpickr").flatpickr({ enableTime: !0, dateFormat: "d-m-Y H:i" });
                 },
                 error: function (e, v) {
@@ -321,44 +324,48 @@
 
 
         //saved
-        $(document).on('click', '#saveRecord', function () {
+        $(document).on('click', '#saveRecord', function (e) {
             debugger;
-            var sharedItems = [];
-            var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
-            $.each(getCheck, function () {
-                var sharedItem = {
-                    SharedData: $(this).attr("data-id"),
-                    Name: $(this).attr("data-name"),
-                    ThumbnailLink: $(this).attr("data-thumbnailLink"),
-                    MIMEType: $(this).attr("data-mimeType"),
+            e.preventDefault();
+            if (!$("#validateForm").parsley().validate()) {
+                return false;
+            }
+            else {
+                var sharedItems = [];
+                var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
+                $.each(getCheck, function () {
+                    var sharedItem = {
+                        SharedData: $(this).attr("data-id"),
+                        Name: $(this).attr("data-name"),
+                        ThumbnailLink: $(this).attr("data-thumbnailLink"),
+                        MIMEType: $(this).attr("data-mimeType"),
+                    };
+                    sharedItems.push(sharedItem);
+                });
+                var request = {
+                    UserName: $("#userName").val(),
+                    Mobile: $("#mobile").val(),
+                    ExpiryTime: $("#expiryTime").val(),
+                    sharedItems: sharedItems
                 };
-                sharedItems.push(sharedItem);
-            });
-            var request = {
-                UserName: $("#userName").val(),
-                Mobile: $("#mobile").val(),
-                ExpiryTime: $("#expiryTime").val(),
-                sharedItems: sharedItems
-            };
-            var sharedId;
-            $.ajax({
-                url: '/GDrive/SaveDrive',
-                type: 'POST',
-                data: { 'request': request },
-                dataType: 'json',
-                success: function (data) {
-                    debugger;
-                    sharedId = data.sharedData;
-                    getSharedData(sharedId);
-                },
-                error: function (e, v) {
-                    alert("error while opening model");
-                }
-            });
+                var sharedId;
+                $.ajax({
+                    url: '/GDrive/SaveDrive',
+                    type: 'POST',
+                    data: { 'request': request },
+                    dataType: 'json',
+                    success: function (data) {
+                        sharedId = data.sharedData;
+                        getSharedData(sharedId);
+                    },
+                    error: function (e, v) {
+                        alert("error while opening model");
+                    }
+                });
+            }
         });
 
         function getSharedData(sharedId) {
-            debugger;
             $.ajax({
                 url: '/GDrive/GetSharedData',
                 type: 'POST',
@@ -374,7 +381,7 @@
                 }
             });
         }
-        function myFunction() {
+        $(document).on('click', '.myFunction', function () {
             var copyText = document.getElementById("myInput");
             copyText.select();
             copyText.setSelectionRange(0, 99999);
@@ -382,11 +389,6 @@
 
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copied: " + copyText.value;
-        }
-
-        function outFunc() {
-            var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copy to clipboard";
-        }
+        });
     </script>
 }

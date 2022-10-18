@@ -12,6 +12,7 @@ namespace CNJewellerAdmin.Models
         public string ExpiryLimit { get; set; }
         public string CountDays { get; set; }
         public string Link { get; set; }
+        public bool IsLinkExpire { get; set; }
         public List<SharedItem> sharedItems { get; set; }
       
     }
