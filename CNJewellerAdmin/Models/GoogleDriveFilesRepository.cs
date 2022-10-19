@@ -301,6 +301,25 @@ namespace CNJewellerAdmin.Models
             Console.WriteLine("Folder ID: " + file.Id);
         }
 
+        // Create multiple folder in drive
+        //public List<FolderListDTO> CreateDriveFolder(string FolderName)
+        //{
+        //    Google.Apis.Drive.v3.DriveService service = GetService();
+
+        //    var FileMetaData = new Google.Apis.Drive.v3.Data.File();
+        //    FileMetaData.Name = FolderName;
+        //    FileMetaData.MimeType = "application/vnd.google-apps.folder";
+
+        //    Google.Apis.Drive.v3.FilesResource.CreateRequest request;
+
+        //    request = service.Files.Create(FileMetaData);
+        //    request.Fields = "id";
+        //    var file = request.Execute();
+        //    List<FolderListDTO> abc = new List<FolderListDTO>();
+
+        //    return file.Id;
+        //}
+
         // Create Folder in existing folder
         public void CreateFolderInFolder(string folderId, string FolderName)
         {
@@ -487,5 +506,9 @@ namespace CNJewellerAdmin.Models
             }
         }
 
+        internal List<GoogleDriveFileNew> GetContainsInFolder(List<CreateSharedDataRequest> sharedItems)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

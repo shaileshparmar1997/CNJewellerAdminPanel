@@ -23,7 +23,7 @@ namespace CNJewellerAdmin.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=IAH1L3006\\SQLEXPRESS;Database=CNJ;User Id=sa;Password=ikart@3689;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=IAH1L3006\\SQLEXPRESS;Database=CNJ;User Id=sa; password=ikart@3689");
             }
         }
 
@@ -35,6 +35,8 @@ namespace CNJewellerAdmin.Model
 
                 entity.Property(e => e.ExpiryTime).HasColumnType("datetime");
 
+                entity.Property(e => e.Mobile).HasMaxLength(10);
+
                 entity.Property(e => e.SharedGuid).HasColumnName("SharedGUID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
@@ -44,13 +46,15 @@ namespace CNJewellerAdmin.Model
 
             modelBuilder.Entity<ShareDatum>(entity =>
             {
+                entity.Property(e => e.LocalFilePath).HasMaxLength(1000);
+
                 entity.Property(e => e.Mimetype)
                     .HasMaxLength(1000)
                     .HasColumnName("MIMEType");
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(1000);
 
-                entity.Property(e => e.SharedData).HasMaxLength(50);
+                entity.Property(e => e.SharedData).HasMaxLength(1000);
 
                 entity.Property(e => e.SharedGuid).HasColumnName("SharedGUID");
 

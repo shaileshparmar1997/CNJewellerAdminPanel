@@ -61,7 +61,17 @@
                                         <img src="@item.ThumbnailLink" style="height: 35px;width: 35px;border-radius: 6px;" />
                                     }
                                 </td>
-                                <td>@item.Name</td>
+                                <!-----FOLDER LINKS--->
+                                <td>
+                                     @if (item.MIMEType == "application/vnd.google-apps.folder")
+                                    {
+                                        <div>@item.Name</div>
+                                    }
+                                    else
+                                    {
+                                        @item.Name
+                                    }
+                                  </td>
                                 <td>
                                     <button class="btn btn-danger deleteRow" data-id="@item.SharedData">Delete</button>
                                 </td>

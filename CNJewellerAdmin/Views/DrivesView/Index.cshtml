@@ -242,8 +242,8 @@
                                         {
                                             <div class="col-md-3 filter-item all graphic photography">
                                                 <div class="gal-box">
-                                                    <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2">
-                                                        <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:250px" 8>
+                                                    <a href="@item.LocalFilePath" class="image-popup" title="Screenshot-2">
+                                                        <img src="@item.LocalFilePath" class="img-fluid" alt="work-thumbnail" style="height:250px">
                                                     </a>
                                                     <div class="gall-info row">
                                                         <div class="col-md-8">
@@ -281,7 +281,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col pl-0">
-                                                                <a href="@item.SharedGuid" class="text-muted font-weight-medium" data-id="@item.SharedGuid">@item.Name</a>
+                                                                <a href="/DrivesView/Index?sharedId=@item.SharedData" class="text-muted font-weight-medium" data-id="@item.SharedGuid">@item.Name</a>
                                                             </div>
                                                         </div> <!-- end row -->
                                                     </div> <!-- end .p-2-->
@@ -756,7 +756,7 @@
 
     <script>
 
-      
+
 
 
         $(document).ready(function () {

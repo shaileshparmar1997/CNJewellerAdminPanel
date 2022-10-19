@@ -8,7 +8,7 @@ namespace CNJewellerAdmin.Model
         public long Id { get; set; }
         public Guid? SharedGuid { get; set; }
         public string UserName { get; set; } = null!;
-        public int Mobile { get; set; }
+        public string Mobile { get; set; } = null!;
         public DateTime ExpiryTime { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }

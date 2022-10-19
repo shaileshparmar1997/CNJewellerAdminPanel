@@ -1,4 +1,5 @@
 ﻿using CNJewellerAdmin.Helper;
+using CNJewellerAdmin.Helper.GDrive;
 using CNJewellerAdmin.Model;
 using CNJewellerAdmin.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,14 @@ namespace CNJewellerAdmin.Controllers
 {
     public class DrivesViewController : Controller
     {
+        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IConfiguration _configuration;
+        public DrivesViewController(IWebHostEnvironment hostEnvironment, IConfiguration configuration)
+        {
+            this._hostEnvironment = hostEnvironment;
+            this._configuration = configuration;
+        }
+
         public IActionResult Index(Guid sharedId)
         {
             DriveFilesDTO response = new DriveFilesDTO();
@@ -43,6 +52,7 @@ namespace CNJewellerAdmin.Controllers
                                 list.MIMEType = item.Mimetype;
                                 list.ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "";
                                 list.SharedGuid = item.SharedGuid;
+                                list.LocalFilePath = !string.IsNullOrEmpty(item.LocalFilePath) ? Path.Combine(_hostEnvironment.WebRootPath, item.LocalFilePath) : "";
                                 response.sharedItems.Add(list);
                             }
                         }

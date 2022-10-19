@@ -74,7 +74,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col pl-0">
-                                                                    <a href="@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
+                                                                    <a href="/GDrive/GetContainsInFolder?folderId=@item.Id" class="text-muted font-weight-medium" data-id="@item.Id">@item.Name</a>
                                                                 </div>
                                                                 <div class="col pl-0">
                                                                     <input type="checkbox" class="FolderCheck" data-id="@item.Id" data-name="@item.Name" data-thumbnailLink="@item.ThumbnailLink" data-mimeType="@item.MimeType" name="selectedCheck[]" style="float:right" />
@@ -284,7 +284,6 @@
 
         //open model
         $(document).on('click', '.openDrive', function () {
-            debugger;
             var currentdate = new Date();
             var datetime = currentdate.getDate() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getFullYear() + " " + currentdate.getHours() + ":" + currentdate.getMinutes();
             $("#expiryTime").val(datetime);
@@ -335,6 +334,7 @@
                 var getCheck = $("input:checkbox[name='selectedCheck[]']:checked");
                 $.each(getCheck, function () {
                     var sharedItem = {
+                        FolderId: $(this).attr("data-id"),
                         SharedData: $(this).attr("data-id"),
                         Name: $(this).attr("data-name"),
                         ThumbnailLink: $(this).attr("data-thumbnailLink"),

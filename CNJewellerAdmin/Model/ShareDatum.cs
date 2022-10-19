@@ -11,5 +11,6 @@ namespace CNJewellerAdmin.Model
         public string Name { get; set; } = null!;
         public string? ThumbnailLink { get; set; }
         public string Mimetype { get; set; } = null!;
+        public string? LocalFilePath { get; set; }
     }
 }

@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Content\GDrives\**" />
+    <Compile Remove="wwwroot\GoogleDriveFiles\**" />
+    <Content Remove="wwwroot\Content\GDrives\**" />
+    <Content Remove="wwwroot\GoogleDriveFiles\**" />
+    <EmbeddedResource Remove="wwwroot\Content\GDrives\**" />
+    <EmbeddedResource Remove="wwwroot\GoogleDriveFiles\**" />
+    <None Remove="wwwroot\Content\GDrives\**" />
+    <None Remove="wwwroot\GoogleDriveFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\AUTHORS.txt" />
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\external\sizzle\LICENSE.txt" />
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\LICENSE.txt" />
@@ -22,7 +33,7 @@
     <Folder Include="Data\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Repository\" />
-    <Folder Include="wwwroot\GoogleDriveFiles\" />
+    <Folder Include="wwwroot\SharedDriveFiles\" />
     <Folder Include="wwwroot\theme\assets\images\NewFolder\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\src\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\test\" />

@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using CNJewellerAdmin.Model;
 using System.Globalization;
+using Microsoft.AspNetCore.Hosting;
+using static NuGet.Packaging.PackagingConstants;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System.IO;
+using System.Security.Policy;
 
 namespace CNJewellerAdmin.Controllers
 {
@@ -16,7 +21,8 @@ namespace CNJewellerAdmin.Controllers
     {
         private readonly GoogleDriveFilesRepository _GDriveHelper;
         public string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
-
+        public string MainFilePath = string.Empty;
+        public string LocalFolderPath = string.Empty;
 
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
@@ -77,6 +83,52 @@ namespace CNJewellerAdmin.Controllers
             return PartialView("~/Views/GDrive/_filesData.cshtml", request);
         }
 
+
+        private async Task<List<DriveFilesDTO>> CreateLocalGDrives(CreateSharedDataRequest request, string mainFilePath = "")
+        {
+            List<GoogleDriveFileNew> driveFiles = new List<GoogleDriveFileNew>();
+            driveFiles = _GDriveHelper.GetContainsInFolder(request.SharedData);
+            string SubFolderPath = "";
+            if (driveFiles.Count() > 0)
+            {
+                SubFolderPath = mainFilePath;
+            }
+            foreach (var item in driveFiles)
+            {
+                if (item.MimeType == "application/vnd.google-apps.folder")
+                {
+                    // MainFilePath
+                    string subFolderPath = SubFolderPath + "/" + item.Name;
+                    if (!Directory.Exists(subFolderPath))
+                    {
+                        Directory.CreateDirectory(subFolderPath);
+                    }
+                    //SubFolderPath = subFolderPath;
+                    CreateSharedDataRequest newRequest = new CreateSharedDataRequest();
+                    newRequest.SharedGuid = Guid.NewGuid();
+                    newRequest.SharedData = item.Id;
+                    newRequest.Name = item.Name;
+                    newRequest.ThumbnailLink = item.ThumbnailLink;
+                    newRequest.Mimetype = item.MimeType;
+                    var resultData = await CreateLocalGDrives(newRequest, subFolderPath);
+                }
+                else
+                {
+                    var imgFilePath = SubFolderPath + "/" + item.Name;
+                    using (var client = new HttpClient())
+                    {
+                        using (var responseUrl = await client.GetAsync(item.ThumbnailLink))
+                        {
+                            byte[] imageBytes = await responseUrl.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                            System.IO.File.WriteAllBytes(imgFilePath, imageBytes);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
         [HttpPost]
         public async Task<JsonResult> SaveDrive(CreateDriveFilesRequest request)
         {
@@ -96,15 +148,54 @@ namespace CNJewellerAdmin.Controllers
                         drivesDetail.CreatedDate = DateTime.Now;
                         drivesDetail.IsActive = true;
                         await db.DriveFiles.AddAsync(drivesDetail);
+
+                        List<DriveFilesDTO> result = new List<DriveFilesDTO>();
                         foreach (var item in request.sharedItems)
                         {
+                            string localFilePath = "";
+                            var datetime = DateTime.Now.ToString("ddMMyyyyHHmm");
+                            var mobDrivePath = request.Mobile + "_" + datetime;
+                            string createCustFolder = _configuration.GetValue<string>("FileLocation:DriveFolder") + mobDrivePath;
+                            var physicalCustPath = Path.Combine(_hostEnvironment.WebRootPath, createCustFolder);
+                            localFilePath = createCustFolder;
+                            if (!Directory.Exists(physicalCustPath))
+                            {
+                                Directory.CreateDirectory(physicalCustPath);
+                            }
+                            MainFilePath = physicalCustPath;
+                            if (item.Mimetype == "application/vnd.google-apps.folder")
+                            {
+                                string tempFolderPath = createCustFolder + "/" + item.Name;
+                                var physicalPath = Path.Combine(_hostEnvironment.WebRootPath, tempFolderPath);
+                                if (!Directory.Exists(physicalPath))
+                                {
+                                    Directory.CreateDirectory(physicalPath);
+                                }
+                                MainFilePath = physicalPath;
+                                var abcd = await CreateLocalGDrives(item, MainFilePath);
+                            }
+                            else
+                            {
+                                var imgFilePath  = MainFilePath + "/" + item.Name;
+                                localFilePath = localFilePath + "/" + item.Name;
+                                using (var client = new HttpClient())
+                                {
+                                    using (var responseUrl = await client.GetAsync(item.ThumbnailLink))
+                                    {
+                                        byte[] imageBytes = await responseUrl.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                                        System.IO.File.WriteAllBytes(imgFilePath, imageBytes);
+                                    }
+                                }
+                            }
+
                             var subData = new ShareDatum
                             {
                                 SharedGuid = drivesDetail.SharedGuid,
                                 SharedData = item.SharedData,
                                 Name = item.Name,
                                 Mimetype = item.Mimetype,
-                                ThumbnailLink =!string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "",
+                                ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "",
+                                LocalFilePath = localFilePath,
                             };
                             await db.ShareData.AddAsync(subData);
                         }
@@ -128,6 +219,8 @@ namespace CNJewellerAdmin.Controllers
             return Json(response);
         }
 
+
+
         [HttpPost]
         public ActionResult GetSharedData(Guid sharedId)
         {
@@ -144,7 +237,7 @@ namespace CNJewellerAdmin.Controllers
                         response.Mobile = sharedData.Mobile;
                         response.ExpiryTime = sharedData.ExpiryTime.ToString("dd-MM-yyyy HH:mm");
                         response.CurrentDateTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-                       TimeSpan ts = sharedData.ExpiryTime - DateTime.Now;
+                        TimeSpan ts = sharedData.ExpiryTime - DateTime.Now;
                         var d = ts.Days;
                         var h = ts.Hours;
                         var m = ts.Minutes;
@@ -177,7 +270,7 @@ namespace CNJewellerAdmin.Controllers
             catch (Exception ex)
             {
             }
-            return PartialView("~/Views/GDrive/_getSharedList.cshtml",response);
+            return PartialView("~/Views/GDrive/_getSharedList.cshtml", response);
         }
 
         public IActionResult GetContainsInFolder(string folderId)

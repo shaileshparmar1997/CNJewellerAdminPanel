@@ -2,10 +2,11 @@
 {
     public class CreateDriveFilesRequest
     {
+        public string FolderId { get; set; }    
         public long Id { get; set; }
         public Guid? SharedGuid { get; set; }
         public string UserName { get; set; } = null!;
-        public int Mobile { get; set; }
+        public string Mobile { get; set; }
         public string ExpiryTime { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -21,5 +22,6 @@
         public string Name { get; set; } = null!;
         public string? ThumbnailLink { get; set; }
         public string Mimetype { get; set; } = null!;
+        public string LocalFilePath { get; set; }
     }
 }
