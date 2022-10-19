@@ -10,10 +10,14 @@ namespace CNJewellerAdmin.Controllers
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly GoogleDriveFilesRepository _GDriveHelper;
+
         public DrivesViewController(IWebHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             this._hostEnvironment = hostEnvironment;
             this._configuration = configuration;
+            _GDriveHelper = new GoogleDriveFilesRepository(hostEnvironment);
+
         }
 
         public IActionResult Index(Guid sharedId)
@@ -73,5 +77,14 @@ namespace CNJewellerAdmin.Controllers
             }
             return View(response);
         }
+
+        public IActionResult GetContainsInFolder(string folderId)
+        {
+            List<GoogleDriveFileNew> result = new List<GoogleDriveFileNew>();
+            result = _GDriveHelper.GetContainsInFolder(folderId);
+            return View("Index", result);
+        }
+
+
     }
 }
