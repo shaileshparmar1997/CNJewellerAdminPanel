@@ -80,9 +80,19 @@ namespace CNJewellerAdmin.Controllers
 
         public IActionResult GetContainsInFolder(string folderId)
         {
+            DriveFilesDTO response = new DriveFilesDTO();
             List<GoogleDriveFileNew> result = new List<GoogleDriveFileNew>();
             result = _GDriveHelper.GetContainsInFolder(folderId);
-            return View("Index", result);
+            foreach (var item in result)
+            {
+                SharedItem list = new SharedItem();
+                list.SharedData = item.Id;
+                list.Name = item.Name;
+                list.MIMEType = item.MimeType;
+                list.ThumbnailLink = !string.IsNullOrEmpty(item.ThumbnailLink) ? item.ThumbnailLink : "";
+                response.sharedItems.Add(list);
+            }
+            return View("Index", response);
         }
 
 
