@@ -1,6 +1,11 @@
 ﻿using CNJewellerAdmin.DTOs.Account.Token;
+using CNJewellerAdmin.DTOs.Base;
+using CNJewellerAdmin.Helper;
 using CNJewellerAdmin.Helper.DataAccess;
+using CNJewellerAdmin.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
 
 namespace CNJewellerAdmin.Controllers
 {
@@ -12,7 +17,7 @@ namespace CNJewellerAdmin.Controllers
 
             if (Request.Cookies["userName"] != null)
             {
-                model.EmailAddress = Request.Cookies["userName"];
+                model.MobileNo = Request.Cookies["userName"];
             }
 
             if (Request.Cookies["password"] != null)
@@ -24,71 +29,57 @@ namespace CNJewellerAdmin.Controllers
 
         public async Task<IActionResult> ValidateUser(UserValidateRequest request)
         {
-            TokenResponse result = new TokenResponse();
+            BaseResponse response = new BaseResponse();
             try
             {
-                var route = "Token";
-                var response = await DataHelper<TokenResponse>.AuthenticateUser(route, request);
-                if (response != null && response.Result.Flag && response.Data != null)
+                using (var db = new CNJewellerDBContext())
                 {
-                    result = response.Data;
-                    if (request.IsRemember && response.Data != null)
+                    var user = db.UserDetails.FirstOrDefault(x => x.MobileNo.Trim() == request.MobileNo.Trim() && x.RowStatus == (int)RowStatus.Active);
+                    if (user != null)
                     {
-                        var option = new CookieOptions();
-                        option.Expires = DateTime.Now.AddDays(15);
-                        option.IsEssential = true;
-                        Response.Cookies.Append("userName", request.EmailAddress, option);
+                        var passwordHasher = new PasswordHasher<string>();
+                        var passwordValidateResult = passwordHasher.VerifyHashedPassword(user.MobileNo, user.Password, request.Password);
+                        if (passwordValidateResult == PasswordVerificationResult.Success)
+                        {
+                            if (request.IsRemember)
+                            {
+                                var option = new CookieOptions();
+                                option.Expires = DateTime.Now.AddDays(15);
+                                option.IsEssential = true;
+                                Response.Cookies.Append("userName", request.MobileNo, option);
 
-                        var option1 = new CookieOptions();
-                        option1.Expires = DateTime.Now.AddDays(15);
-                        option1.IsEssential = true;
-                        Response.Cookies.Append("password", request.Password, option1);
+                                var option1 = new CookieOptions();
+                                option1.Expires = DateTime.Now.AddDays(15);
+                                option1.IsEssential = true;
+                                Response.Cookies.Append("password", request.Password, option1);
+                            }
+                            HttpContext.Session.SetString("firstName", user.FirstName);
+                            HttpContext.Session.SetString("middleName", user.MiddleName);
+                            HttpContext.Session.SetString("lastName", user.LastName);
+                            HttpContext.Session.SetString("currentMobile", user.MobileNo);
+                            HttpContext.Session.SetString("currentEmailId", user.EmailId??"");
+                            HttpContext.Session.SetInt32("currentRoleId", user.RoleId);
+                            HttpContext.Session.SetString("lastName", user.LastName);
+                            HttpContext.Session.SetString("lastName", user.LastName);
+                            HttpContext.Session.SetString("lastName", user.LastName);
+                            HttpContext.Session.SetString("lastName", user.LastName);
+                            response.Acknowledge = AcknowledgeType.Success;
+                            response.Message = "Success";
+                        }
+                        else
+                        {
+                            response.Acknowledge = AcknowledgeType.Failure;
+                            response.Message = "Mobile no or password does not match, Please verify";
+                        }
                     }
-                    HttpContext.Session.SetString("access_Token", response.Data.Access_Token);
-                    HttpContext.Session.SetString("firstName", response.Data.FirstName);
-                    HttpContext.Session.SetString("lastName", response.Data.LastName);
-                    HttpContext.Session.SetString("legalUserEmail", response.Data.Email);
-                    HttpContext.Session.SetInt32("legalUserRoleId", response.Data.RoleId);
-                    HttpContext.Session.SetInt32("legalUserId", response.Data.Id);
-                    HttpContext.Session.SetInt32("legalId", response.Data.LegelId);
-                    HttpContext.Session.SetString("legalUserRole", response.Data.UserType);
-                    var AuthToken = HttpContext.Session.GetString("access_Token");
-                    //if (response.Data.RoleId > 0)
-                    //{
-                    //    var authToken = HttpContext.Session.GetString("access_Token");
-                    //    var roleRoute = "Role/CurrentUserRole?id=" + response.Data.RoleId;
-                    //    var roleResponse = await DataHelper<GetRoleDetailsResponse>.Execute(roleRoute, OperationTypes.GET, authToken);
-                    //    if (roleResponse != null && roleResponse.Result.Flag && roleResponse.Data != null)
-                    //    {
-                    //        var roleResult = roleResponse.Data.ModulesNames;
-                    //        HttpContext.Session.SetObjectAsJson("UserRoleData", roleResponse.Data);
-                    //        ViewData["CurUserRoleModule"] = HttpContext.Session.GetObjectFromJson<GetRoleDetailsResponse>("UserRoleData");
-                    //        //ViewData["CurUserRoleModule"] = roleResponse.Data.RoleData;
-                    //        //ViewBag.CurrentUserRoleData = roleResponse.Data.RoleData;
-                    //        //ViewBag.RoleModuleData = roleResponse.Data.ModulesNames;
-                    //    }
-                    //}
-                    string userRolePermission = "";
-
-                    if (response.Data.RoleName.ToUpper() == "ADMIN")
-                    {
-                        userRolePermission = "Write,Delete,Read";
-                    }
-                    else
-                    {
-                        userRolePermission = "Write,Delete,Read";
-                    }
-                }
-                else
-                {
-
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                response.Acknowledge = AcknowledgeType.Failure;
+                response.Message = "Somethinf wrong , please try again after some time";
             }
-
-            return Json(result);
+            return Json(response);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class UserValidateRequest
     {
-        public string EmailAddress { get; set; }
+        public string MobileNo { get; set; }
         public string Password { get; set; }
         public bool IsRemember { get; set; }
     }
