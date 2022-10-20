@@ -3,6 +3,7 @@ using CNJewellerAdmin.DTOs.UserDetails;
 using CNJewellerAdmin.Helper;
 using CNJewellerAdmin.Helper.DataAccess;
 using CNJewellerAdmin.Helper.DateUtil;
+using CNJewellerAdmin.Model;
 using CNJewellerAdmin.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace CNJewellerAdmin.Controllers
             List<UserDetailsDTO> result = new List<UserDetailsDTO>();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var userDetails = db.UserDetails.Where(x => x.RowStatus == (int)RowStatus.Active);
                     var officeDetails = db.OfficeMasters.Where(x => x.RowStatus == (int)RowStatus.Active);
@@ -78,7 +79,7 @@ namespace CNJewellerAdmin.Controllers
             {
                 var genderList = ((Genders[])Enum.GetValues(typeof(Genders))).Select(c => new DropDownBase() { Id = (int)c, Name = c.ToString() }).ToList();
                 request.Genders = genderList;
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     request.Offices = await db.OfficeMasters.Where(x => x.RowStatus == (int)RowStatus.Active).Select(x => new DropDownBase
                     {
@@ -156,7 +157,7 @@ namespace CNJewellerAdmin.Controllers
             {
                 try
                 {
-                    using (var db = new CNJewellerDBContext())
+                    using (var db = new CNJContext())
                     {
                         if (request.Id > 0)
                         {
@@ -249,7 +250,7 @@ namespace CNJewellerAdmin.Controllers
             BaseResponse response = new BaseResponse();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var recordStatus = statusId == 1 ? " Activated " : " InActivated ";
                     response = new BaseResponse
@@ -285,7 +286,7 @@ namespace CNJewellerAdmin.Controllers
             BaseResponse result = new BaseResponse();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var existingData = await db.UserDetails.FirstOrDefaultAsync(x => x.Id == id);
                     if (existingData != null)

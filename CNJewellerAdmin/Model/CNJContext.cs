@@ -17,13 +17,16 @@ namespace CNJewellerAdmin.Model
         }
 
         public virtual DbSet<DriveFile> DriveFiles { get; set; } = null!;
+        public virtual DbSet<OfficeMaster> OfficeMasters { get; set; } = null!;
         public virtual DbSet<ShareDatum> ShareData { get; set; } = null!;
+        public virtual DbSet<UserDetail> UserDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=IAH1L3006\\SQLEXPRESS;Database=CNJ;User Id=sa; password=ikart@3689");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=LAPTOP-EKSUU5RT\\HASHTAGIKART;Database=CNJ;User Id=sa; password=ikart@3689");
             }
         }
 
@@ -44,6 +47,29 @@ namespace CNJewellerAdmin.Model
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<OfficeMaster>(entity =>
+            {
+                entity.ToTable("OfficeMaster");
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.BranchCode).HasMaxLength(100);
+
+                entity.Property(e => e.City).HasMaxLength(100);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.OfficeName).HasMaxLength(100);
+
+                entity.Property(e => e.PhoneNo).HasMaxLength(12);
+
+                entity.Property(e => e.Pincode).HasMaxLength(10);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<ShareDatum>(entity =>
             {
                 entity.Property(e => e.LocalFilePath).HasMaxLength(1000);
@@ -59,6 +85,33 @@ namespace CNJewellerAdmin.Model
                 entity.Property(e => e.SharedGuid).HasColumnName("SharedGUID");
 
                 entity.Property(e => e.ThumbnailLink).HasMaxLength(1000);
+            });
+
+            modelBuilder.Entity<UserDetail>(entity =>
+            {
+                entity.ToTable("UserDetail");
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.EmailId).HasMaxLength(50);
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.JoiningDate).HasColumnType("datetime");
+
+                entity.Property(e => e.LastName).HasMaxLength(50);
+
+                entity.Property(e => e.MiddleName).HasMaxLength(50);
+
+                entity.Property(e => e.MobileNo).HasMaxLength(12);
+
+                entity.Property(e => e.Pincode).HasMaxLength(10);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

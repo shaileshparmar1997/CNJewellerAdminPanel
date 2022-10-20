@@ -32,7 +32,7 @@ namespace CNJewellerAdmin.Controllers
             BaseResponse response = new BaseResponse();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var user = db.UserDetails.FirstOrDefault(x => x.MobileNo.Trim() == request.MobileNo.Trim() && x.RowStatus == (int)RowStatus.Active);
                     if (user != null)

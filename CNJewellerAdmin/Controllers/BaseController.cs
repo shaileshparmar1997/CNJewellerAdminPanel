@@ -1,6 +1,7 @@
 ﻿using CNJewellerAdmin.DTOs.UserDetails;
 using CNJewellerAdmin.Helper;
 using CNJewellerAdmin.Helper.DateUtil;
+using CNJewellerAdmin.Model;
 using CNJewellerAdmin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace CNJewellerAdmin.Controllers
             UserDetailsDTO response = new UserDetailsDTO();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var userDetails = await db.UserDetails.FirstOrDefaultAsync(x => x.Id == id && x.RowStatus == (int)RowStatus.Active);
                     if (userDetails != null)

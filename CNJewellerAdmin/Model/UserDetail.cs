@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CNJewellerAdmin.Models
+namespace CNJewellerAdmin.Model
 {
     public partial class UserDetail
     {
         public int Id { get; set; }
         public int OfficeId { get; set; }
         public string FirstName { get; set; } = null!;
-        public string MiddleName { get; set; } = null!;
+        public string? MiddleName { get; set; }
         public string LastName { get; set; } = null!;
         public string MobileNo { get; set; } = null!;
         public string? EmailId { get; set; }
@@ -26,7 +26,5 @@ namespace CNJewellerAdmin.Models
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int RowStatus { get; set; }
-
-        public virtual OfficeMaster Office { get; set; } = null!;
     }
 }

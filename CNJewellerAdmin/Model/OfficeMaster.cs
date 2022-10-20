@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CNJewellerAdmin.Models
+namespace CNJewellerAdmin.Model
 {
     public partial class OfficeMaster
     {
-        public OfficeMaster()
-        {
-            UserDetails = new HashSet<UserDetail>();
-        }
-
         public int Id { get; set; }
         public string OfficeName { get; set; } = null!;
         public string PhoneNo { get; set; } = null!;
@@ -23,7 +18,5 @@ namespace CNJewellerAdmin.Models
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int RowStatus { get; set; }
-
-        public virtual ICollection<UserDetail> UserDetails { get; set; }
     }
 }

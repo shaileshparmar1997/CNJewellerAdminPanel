@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using CNJewellerAdmin.DTOs.Office;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using CNJewellerAdmin.Model;
 
 namespace CNJewellerAdmin.Controllers
 {
@@ -23,7 +24,7 @@ namespace CNJewellerAdmin.Controllers
             List<OfficeDetailsDTO> result = new List<OfficeDetailsDTO>();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var userDetails = db.UserDetails.Where(x => x.RowStatus == (int)RowStatus.Active);
                     var officeDetails = db.OfficeMasters.Where(x => x.RowStatus == (int)RowStatus.Active).Select(x => new OfficeDetailsDTO
@@ -53,7 +54,7 @@ namespace CNJewellerAdmin.Controllers
             CreateUpdateOfficeMasterRequest request = new CreateUpdateOfficeMasterRequest();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     if (id>0)
                     {
@@ -112,7 +113,7 @@ namespace CNJewellerAdmin.Controllers
             {
                 try
                 {
-                    using (var db = new CNJewellerDBContext())
+                    using (var db = new CNJContext())
                     {
                         if (request.Id > 0)
                         {
@@ -177,7 +178,7 @@ namespace CNJewellerAdmin.Controllers
             BaseResponse response = new BaseResponse();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var recordStatus = statusId == 1 ? " Activated " : " InActivated ";
                     response = new BaseResponse
@@ -213,7 +214,7 @@ namespace CNJewellerAdmin.Controllers
             BaseResponse result = new BaseResponse();
             try
             {
-                using (var db = new CNJewellerDBContext())
+                using (var db = new CNJContext())
                 {
                     var existingData = await db.OfficeMasters.FirstOrDefaultAsync(x => x.Id == id);
                     if (existingData != null)
