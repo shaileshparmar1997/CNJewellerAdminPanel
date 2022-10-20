@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Content\GDrives\**" />
+    <Compile Remove="wwwroot\GoogleDriveFiles\**" />
+    <Content Remove="wwwroot\Content\GDrives\**" />
+    <Content Remove="wwwroot\GoogleDriveFiles\**" />
+    <EmbeddedResource Remove="wwwroot\Content\GDrives\**" />
+    <EmbeddedResource Remove="wwwroot\GoogleDriveFiles\**" />
+    <None Remove="wwwroot\Content\GDrives\**" />
+    <None Remove="wwwroot\GoogleDriveFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\AUTHORS.txt" />
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\external\sizzle\LICENSE.txt" />
     <Content Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\LICENSE.txt" />
@@ -22,7 +33,8 @@
     <Folder Include="Data\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Repository\" />
-    <Folder Include="wwwroot\GoogleDriveFiles\" />
+    <Folder Include="wwwroot\SharedDriveFiles\" />
+    <Folder Include="wwwroot\theme\assets\images\NewFolder\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\src\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\test\" />
     <Folder Include="wwwroot\theme\assets\libs\multiselect\node_modules\jquery\dist\" />
@@ -38,6 +50,8 @@
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.57.0.2789" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
@@ -51,6 +65,22 @@
 
   <ItemGroup>
     <Content Update="wwwroot\Content\client_secret.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Content\DriveServiceCredentials.json\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\Content\Google - Copy.Apis.Auth.OAuth2.Responses.TokenResponse-user">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Content\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

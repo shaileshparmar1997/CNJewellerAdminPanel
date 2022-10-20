@@ -1,8 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@model CNJewellerAdmin.Models.DriveFilesDTO
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"]  | UBold - Responsive Admin Dashboard Template</title>
+    <title>@ViewData["Title"]  | CNJ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
@@ -36,7 +40,17 @@
     <!-- icons -->
     <link href="~/theme/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <style>
-        .cusmodelHeader {
+        .navbar-custom .topnav-menu .nav-link {
+            padding: 4px 15px !important;
+            color: rgba(255,255,255,.6);
+            min-width: 32px;
+            display: block;
+            line-height: 70px;
+            text-align: center;
+            max-height: 70px;
+            .cusmodelHeader
+
+        {
             background: navy;
             color: #fff;
         }
@@ -173,14 +187,14 @@
                 </div>
 
 
-                <div class="" style="height:70px;width: 842px;float: left;text-align: center;transition: all .1s ease-out;padding-top: 0px;">
+               <div class="" style="height:70px;width: 842px;float: left;text-align: center;transition: all .1s ease-out;padding-top: 0px;">
                     <h3 style="color: #e5e5e5;padding-top: 14px;">C.N.JEWELLERS</h3>
                 </div>
 
-                      <div style="height: 70px;width: 165px;float: left;text-align: right;transition: all .1s ease-out;padding-top:5px">
-                <h5 style="color: #bebebe;padding-top: 14px;">Call : + 91 9978125551</h5>
+                <div style="height: 70px;width: 165px;float: left;text-align: right;transition: all .1s ease-out;padding-top:5px">
+                    <h5 style="color: #bebebe;padding-top: 14px;">Call : + 91 9978125551</h5>
                 </div>
-                
+
                 <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
                     <li>
                         <!-- Mobile menu toggle (Horizontal Layout)-->
@@ -193,217 +207,97 @@
                         </a>
                         <!-- End mobile menu toggle-->
                     </li>
-                    <li class="dropdown notification-list topbar-dropdown" style="float:right">
-                        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="~/theme/assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle">
-                            <span class="pro-user-name ml-1">
-                                Geneva <i class="mdi mdi-chevron-down"></i>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                            <!-- item-->
-                            <div class="dropdown-header noti-title">
-                                <h6 class="text-overflow m-0">Welcome !</h6>
-                            </div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-user"></i>
-                                <span>My Account</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-settings"></i>
-                                <span>Settings</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-lock"></i>
-                                <span>Lock Screen</span>
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-log-out"></i>
-                                <span>Logout</span>
-                            </a>
-
-                        </div>
-                    </li>
-                   
                 </ul>
                 <div class="clearfix"></div>
             </div>
         </div>
-
         <!-- end Topbar -->
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="left-side-menu">
-
-            <div class="h-100" data-simplebar>
-
-                <!-- User box -->
-                <div class="user-box text-center">
-                    <img src="~/theme/assets/images/users/user-1.jpg" alt="user-img" title="Mat Helme"
-                         class="rounded-circle avatar-md">
-                    <div class="dropdown">
-                        <a href="javascript: void(0);" class="text-dark dropdown-toggle h5 mt-2 mb-1 d-block"
-                           data-toggle="dropdown">Geneva Kennedy</a>
-                        <div class="dropdown-menu user-pro-dropdown">
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-user mr-1"></i>
-                                <span>My Account</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-settings mr-1"></i>
-                                <span>Settings</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-lock mr-1"></i>
-                                <span>Lock Screen</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="fe-log-out mr-1"></i>
-                                <span>Logout</span>
-                            </a>
-
-                        </div>
+        <!-- Start Content-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title ">Files List</h4>
                     </div>
-                    <p class="text-muted">Admin Head</p>
                 </div>
-
-                <!--- Sidemenu -->
-                <div id="sidebar-menu">
-
-                    <ul id="side-menu">
-
-                        <li class="menu-title">Navigation</li>
-
-                        <li>
-                            <a href="#sidebarDashboards" data-toggle="collapse">
-                                <i class="mdi mdi-view-dashboard-outline"></i>
-                                <span class="badge badge-success badge-pill float-right">4</span>
-                                <span> Dashboards </span>
-                            </a>
-                            <div class="collapse" id="sidebarDashboards">
-                                <ul class="nav-second-level">
-                                    <li>
-                                        <a href="@Url.Action("Index","SuperDashboard")">Dashboard </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="menu-title mt-2">Master</li>
-                        <li>
-                            <a href="#sidebarEcommerce" data-toggle="collapse">
-                                <i class="mdi mdi-cart-outline"></i>
-                                <span> Master </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            <div class="collapse" id="sidebarEcommerce">
-                                <ul class="nav-second-level">
-                                    <li>
-                                        <a href="@Url.Action("Index","OfficeMaster")">Office</a>
-                                    </li>
-                                    @*                      <li>
-                                    <a href="@Url.Action("Index","ProductCatalogs")">Product Catalogs</a>
-                                    </li>
-                                    <li>
-                                    <a href="@Url.Action("Index","Drive")">Drive</a>
-                                    </li>
-                                    <li>
-                                    <a href="@Url.Action("DriveFileList","Drive")">Drive</a>
-                                    </li>
-                                    <li>
-                                    <a href="@Url.Action("GetDriveData","Drive")">Drive List</a>
-                                    </li>*@
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Index","UserDetails")">
-                                <i class="mdi mdi-forum-outline"></i>
-                                <span> User Details </span>
-                            </a>
-                        </li>
-                        @*<li>
-                        <a href="@Url.Action("GetGoogleDriveFiles","GDrive")">
-                        <i class="mdi mdi-forum-outline"></i>
-                        <span> Drives List </span>
-                        </a>
-                        </li>*@
-                        <li>
-                            <a href="@Url.Action("FolderLists","GDrive")">
-                                <i class="mdi mdi-forum-outline"></i>
-                                <span> GDrive Files </span>
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </div>
-                <!-- End Sidebar -->
-
-                <div class="clearfix"></div>
-
             </div>
-            <!-- Sidebar -left -->
+            <!-- end page title -->
+            <div class="row">
+                @if (Model.IsLinkExpire)
+                {
+                    <div class="col-12">
+                        <h3 style="font-weight:bold;border: 1px solid #00fff1;padding: 50px;margin: 200px 300px; text-align: center;border-radius: 10px;color: red;background: #f5fcfd;">Your link has expired</h3>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="mt-1">
+                            <div class="row">
+                                @if (Model.sharedItems != null)
+                                {
+                                    @foreach (var item in Model.sharedItems)
+                                    {
+                                        @if (@item.MIMEType == "image/png" || @item.MIMEType == "image/jpeg" || @item.MIMEType == "image/gif" || @item.MIMEType == "image/jpeg")
+                                        {
+                                            <div class="col-md-3 filter-item all graphic photography">
+                                                <div class="gal-box">
+                                                    <a href="@item.LocalFilePath" class="image-popup" title="Screenshot-2">
+                                                        <img src="@item.LocalFilePath" class="img-fluid" alt="work-thumbnail" style="height:250px">
+                                                    </a>
+                                                    <div class="gall-info row">
+                                                        <div class="col-md-8">
+                                                            <h4 class="font-16 mt-0">@item.Name</h4>
+                                                        </div>
+                                                    </div> <!-- gallery info -->
+                                                </div> <!-- end gal-box -->
+                                            </div> <!-- end col -->
+                                        }
+                                    }
 
-        </div>
-        <!-- Left Sidebar End -->
-        <!-- ============================================================== -->
-        <!-- Start Page Content here -->
-        <!-- ============================================================== -->
-
-        <div class="content-page">
-            <div class="content">
-
-                <!-- Start Content-->
-                <div class="container-fluid">
-                    @RenderBody()
-                </div> <!-- container -->
-
-            </div> <!-- content -->
-            <!-- Footer Start -->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6">
-                            2015 - <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript:void(0);">About Us</a>
-                                <a href="javascript:void(0);">Help</a>
-                                <a href="javascript:void(0);">Contact Us</a>
+                                }
                             </div>
                         </div>
+
+                        <div class="mt-1">
+                            <div class="row">
+                                @if (Model.sharedItems != null)
+                                {
+                                    @foreach (var item in Model.sharedItems)
+                                    {
+                                        @if (@item.MIMEType == "application/vnd.google-apps.folder")
+                                        {
+                                            <input type="hidden" id="@item.SharedGuid" />
+                                            <input type="hidden" id="@item.MIMEType" />
+                                            <div class="col-xl-3 col-lg-3">
+                                                <div class="card m-1 shadow-none border">
+                                                    <div class="p-2" style="word-break:break-word">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-auto">
+                                                                <div class="avatar-lg">
+                                                                    <span class="avatar-title bg-light text-secondary rounded">
+                                                                        <i data-feather="folder" class="icon-folder"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col pl-0">
+                                                                <a href="/DrivesView/GetContainsInFolder?folderId=@item.SharedData" class="text-muted font-weight-medium" data-id="@item.SharedGuid">@item.Name</a>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                    </div> <!-- end .p-2-->
+                                                </div> <!-- end col -->
+                                            </div> <!-- end col-->
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <!-- end inbox-rightbar-->
                     </div>
-                </div>
-            </footer>
-            <!-- end Footer -->
-
+                }
+            </div>
         </div>
-
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
-
-
-    </div>
+    </div> <!-- content -->
     <!-- END wrapper -->
     <!-- Right Sidebar -->
     <div class="right-bar">
@@ -861,7 +755,34 @@
     <script src="~/theme/assets/js/app.min.js"></script>
 
     <script>
+
+
+
+
         $(document).ready(function () {
+            document.addEventListener('keydown', function () {
+                if (event.keyCode == 123) {
+                    event.preventDefault();
+                    return false;
+                } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+                    event.preventDefault();
+                    return false;
+                } else if (event.ctrlKey && event.keyCode == 85) {
+                    return false;
+                }
+            }, false);
+
+            if (document.addEventListener) {
+                document.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                }, false);
+            } else {
+                document.attachEvent('oncontextmenu', function () {
+                    window.event.returnValue = false;
+                });
+            }
+
+
             $(".selecte2Picker").select2();
             $(".flatpickr").flatpickr();
             var toastType = {
@@ -898,7 +819,6 @@
             window.jQuery.NotificationApp.send(title, message, "top-center", "#da8609", "warning")
         };
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

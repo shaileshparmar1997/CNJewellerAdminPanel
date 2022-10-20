@@ -1,0 +1,86 @@
+﻿@model CNJewellerAdmin.Models.DriveFilesDTO
+<div class="modal-header bg-dark">
+    <h5 class="modal-title" style="color:white;">Drive List</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fas fa-times  icon-2x" style="color:white;"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <form class="px-3" id="validateForm" action="#">
+        
+        <div class="form-group">
+            <label for="userName">Name</label>
+            @Html.TextBoxFor(p => p.UserName, new
+            {
+            @class = "form-control capitalize",
+            @required = "required",
+            @data_parsley_required_message = "Username Is Required",
+            @id="userName"
+            })
+        </div>
+
+        <div class="form-group">
+            <label for="mobile">Mobile No</label>
+            @Html.TextBoxFor(p => p.Mobile, new
+            {
+            @class = "form-control capitalize",
+            @required = "required",
+            @data_parsley_required_message = "Mobile Is Required",
+            @maxlength = "10",
+            @id="mobile"
+            })
+        </div>
+
+        <div class="form-group">
+            <label for="expiryTime">Expiry Time</label>
+            <input type="text" class="form-control flatpickr" id="expiryTime">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered mb-0">
+                <thead>
+                    <tr>
+                        <th style="width:25px">#</th>
+                        <th>Name</th>
+                        <th class="text-center" style="width:25px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.sharedItems !=  null)
+                    {
+                        @foreach (var item in Model.sharedItems)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.MIMEType == "application/vnd.google-apps.folder")
+                                    {
+                                        <i data-feather="folder" class="icon-folder"></i>
+                                    }
+                                    else
+                                    {
+                                        <img src="@item.ThumbnailLink" style="height: 35px;width: 35px;border-radius: 6px;" />
+                                    }
+                                </td>
+                                <!-----FOLDER LINKS--->
+                                <td>
+                                     @if (item.MIMEType == "application/vnd.google-apps.folder")
+                                    {
+                                        <div>@item.Name</div>
+                                    }
+                                    else
+                                    {
+                                        @item.Name
+                                    }
+                                  </td>
+                                <td>
+                                    <button class="btn btn-danger deleteRow" data-id="@item.SharedData">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    }        
+                </tbody>
+            </table>
+        </div>
+
+    </form>
+</div>

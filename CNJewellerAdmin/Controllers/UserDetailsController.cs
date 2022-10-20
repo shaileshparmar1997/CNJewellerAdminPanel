@@ -167,7 +167,7 @@ namespace CNJewellerAdmin.Controllers
                                 getUserDetails.FirstName = request.FirstName;
                                 getUserDetails.MiddleName = request.MiddleName;
                                 getUserDetails.LastName = request.LastName;
-                                getUserDetails.MobileNo = request.MobileNo;
+                                //getUserDetails.MobileNo = request.MobileNo;
                                 getUserDetails.EmailId = request.EmailId;
                                 getUserDetails.City = request.City;
                                 getUserDetails.Pincode = request.Pincode;
@@ -191,32 +191,42 @@ namespace CNJewellerAdmin.Controllers
                         }
                         else
                         {
+
                             var passwordHasher = new PasswordHasher<string>();
                             var passwordHash = passwordHasher.HashPassword(request.MobileNo, request.Password);
-
-                            UserDetail userDetail = new UserDetail();
-                            userDetail.OfficeId = request.OfficeId;
-                            userDetail.FirstName = request.FirstName;
-                            userDetail.MiddleName = request.MiddleName;
-                            userDetail.LastName = request.LastName;
-                            userDetail.MobileNo = request.MobileNo;
-                            userDetail.EmailId = request.EmailId;
-                            userDetail.City = request.City;
-                            userDetail.Pincode = request.Pincode;
-                            userDetail.Address = request.Address;
-                            userDetail.JoiningDate = DateUtil.GetDate(request.JoiningDate);
-                            userDetail.RoleId = request.RoleId;
-                            userDetail.UserType = request.UserType;
-                            userDetail.Gender = request.Gender;
-                            userDetail.Password = passwordHash;
-                            userDetail.ProfilePic = request.ProfilePic;
-                            userDetail.CreatedBy = CurrentUserId;
-                            userDetail.CreatedDate = CurrentDate;
-                            userDetail.RowStatus = (int)RowStatus.Active;
-                            await db.UserDetails.AddAsync(userDetail);
-                            await db.SaveChangesAsync();
-                            response.Acknowledge = Helper.AcknowledgeType.Success;
-                            response.Message = "Successfully create new user";
+                            string mobNo = request.MobileNo.Trim();
+                            var mobileNoExist = db.UserDetails.FirstOrDefault(x => x.MobileNo.Trim() == mobNo); 
+                            if (mobileNoExist != null)
+                            {
+                                response.Acknowledge = Helper.AcknowledgeType.Failure;
+                                response.Message = "Mobile no already exists";
+                            }
+                            else
+                            {
+                                UserDetail userDetail = new UserDetail();
+                                userDetail.OfficeId = request.OfficeId;
+                                userDetail.FirstName = request.FirstName;
+                                userDetail.MiddleName = request.MiddleName;
+                                userDetail.LastName = request.LastName;
+                                userDetail.MobileNo = request.MobileNo;
+                                userDetail.EmailId = request.EmailId;
+                                userDetail.City = request.City;
+                                userDetail.Pincode = request.Pincode;
+                                userDetail.Address = request.Address;
+                                userDetail.JoiningDate = DateUtil.GetDate(request.JoiningDate);
+                                userDetail.RoleId = request.RoleId;
+                                userDetail.UserType = request.UserType;
+                                userDetail.Gender = request.Gender;
+                                userDetail.Password = passwordHash;
+                                userDetail.ProfilePic = request.ProfilePic;
+                                userDetail.CreatedBy = CurrentUserId;
+                                userDetail.CreatedDate = CurrentDate;
+                                userDetail.RowStatus = (int)RowStatus.Active;
+                                await db.UserDetails.AddAsync(userDetail);
+                                await db.SaveChangesAsync();
+                                response.Acknowledge = Helper.AcknowledgeType.Success;
+                                response.Message = "Successfully create new user";
+                            }     
                         }
                     }
                 }

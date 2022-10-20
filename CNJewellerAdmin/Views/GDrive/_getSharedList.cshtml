@@ -1,0 +1,48 @@
+﻿@model CNJewellerAdmin.Models.DriveFilesDTO
+<div class="modal-header bg-dark">
+    <h5 class="modal-title" style="color:white;">Drive File List</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fas fa-times  icon-2x" style="color:white;"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="userName" style="color:blue" class="col-md-3">Name : </label>
+            <label for="userName" class="col-md-9">@Model.UserName</label>
+        </div>
+    </div>
+
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="mobile" style="color:blue" class="col-md-3">Mobile No : </label>
+            <label for="userName" class="col-md-9">@Model.Mobile</label>
+        </div>
+    </div>
+
+    <div class="form-group" style="border-bottom:1px solid #e4e4e4">
+        <div class="col-md-12 row">
+            <label for="expiryTime" style="color:blue" class="col-md-3">Expiry Time : </label>
+            <label for="userName" class="col-md-9">@Model.ExpiryTime</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-12 row">
+            <label for="expiryTime"style="color:blue"  class="col-md-3">Link : </label>
+            <input id="myInput" value="@Model.Link" type="text" class="form-control col-md-9" readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary myFunction mr-1">
+            <i class="mdi mdi-content-copy"></i>
+        </button>
+        <a class="btn btn-info  mr-1" href="https://api.whatsapp.com/send?text= '+@Model.Link+' &phone=918000737330">
+            <i class="mdi mdi-whatsapp"></i>
+        </a>
+        <a class="btn btn-warning" href="@Model.Link" target="_blank">
+            <i class="mdi mdi-web"></i>    
+        </a>
+    </div>
+
+</div>
