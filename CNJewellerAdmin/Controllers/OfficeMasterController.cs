@@ -26,8 +26,8 @@ namespace CNJewellerAdmin.Controllers
             {
                 using (var db = new CNJContext())
                 {
-                    var userDetails = db.UserDetails.Where(x => x.RowStatus == (int)RowStatus.Active);
-                    var officeDetails = db.OfficeMasters.Where(x => x.RowStatus == (int)RowStatus.Active).Select(x => new OfficeDetailsDTO
+                    var userDetails = db.UserDetails.Where(x => x.RowStatus != (int)RowStatus.Deleted);
+                    var officeDetails = db.OfficeMasters.Where(x => x.RowStatus != (int)RowStatus.Deleted).Select(x => new OfficeDetailsDTO
                     {
                         Id = x.Id,
                         OfficeName = x.OfficeName,
@@ -229,11 +229,14 @@ namespace CNJewellerAdmin.Controllers
                             Message = "Office Deleted Succesfully"
                         };
                     }
-                    result = new BaseResponse()
+                    else
                     {
-                        Acknowledge = AcknowledgeType.Failure,
-                        Message = "Office not exists"
-                    };
+                        result = new BaseResponse()
+                        {
+                            Acknowledge = AcknowledgeType.Failure,
+                            Message = "Office not exists"
+                        };
+                    }
                 }
             }
             catch (Exception ex)

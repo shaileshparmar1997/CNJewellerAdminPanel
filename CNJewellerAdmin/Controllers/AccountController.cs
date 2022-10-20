@@ -2,6 +2,7 @@
 using CNJewellerAdmin.DTOs.Base;
 using CNJewellerAdmin.Helper;
 using CNJewellerAdmin.Helper.DataAccess;
+using CNJewellerAdmin.Model;
 using CNJewellerAdmin.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

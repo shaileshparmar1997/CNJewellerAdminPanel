@@ -29,8 +29,8 @@ namespace CNJewellerAdmin.Controllers
             {
                 using (var db = new CNJContext())
                 {
-                    var userDetails = db.UserDetails.Where(x => x.RowStatus == (int)RowStatus.Active);
-                    var officeDetails = db.OfficeMasters.Where(x => x.RowStatus == (int)RowStatus.Active);
+                    var userDetails = db.UserDetails.Where(x => x.RowStatus != (int)RowStatus.Deleted);
+                    var officeDetails = db.OfficeMasters.Where(x => x.RowStatus != (int)RowStatus.Deleted);
                     var userData = (from ud in userDetails
                                     join om in officeDetails on ud.OfficeId equals om.Id
                                     select new UserDetailsDTO
@@ -301,11 +301,14 @@ namespace CNJewellerAdmin.Controllers
                             Message = "User Deleted Succesfully"
                         };
                     }
-                    result = new BaseResponse()
+                    else
                     {
-                        Acknowledge = AcknowledgeType.Failure,
-                        Message = "User not exists"
-                    };
+                        result = new BaseResponse()
+                        {
+                            Acknowledge = AcknowledgeType.Failure,
+                            Message = "User not exists"
+                        };
+                    }
                 }
             }
             catch (Exception ex)
