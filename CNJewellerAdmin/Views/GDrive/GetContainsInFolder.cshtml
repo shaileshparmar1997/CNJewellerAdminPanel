@@ -28,16 +28,18 @@
                         </div>
                         <h4 class="page-title ">Sub Drive Manager</h4>
                     </div>
-                    <div class="mt-1 mb-1" style="float:right">
-                        <button class="btn btn-primary openDrive" data-toggle="modal" data-target="#openDrive">Share</button>
-                    </div>
+                    @if (Model.Count() > 0)
+                    {
+                        <div class="mt-1 mb-1" style="float:right">
+                            <button class="btn btn-primary openDrive" data-toggle="modal" data-target="#openDrive">Share</button>
+                        </div>
+                    }
                 </div>
             </div>
             <!-- end page title -->
             @if (Model.Count() > 0)
             {
                 <div class="row">
-
                     <!-- Right Sidebar -->
                     <div class="col-12">
                         <div class="card-box">
@@ -117,8 +119,8 @@
                                             {
                                                 <div class="col-md-3 filter-item all graphic photography">
                                                     <div class="gal-box">
-                                                        <a href="@item.ThumbnailLink" class="image-popup" title="Screenshot-2">
-                                                            <img src="@item.ThumbnailLink" class="img-fluid" alt="work-thumbnail" style="height:250px" 8>
+                                                        <a href="@item.WebContentLink" class="image-popup" title="Screenshot-2">
+                                                            <img src="@item.WebContentLink" class="img-fluid" alt="work-thumbnail" style="height:250px" 8>
                                                         </a>
                                                         <div class="gall-info row">
                                                             <div class="col-md-8">
@@ -225,15 +227,15 @@
                             </div> <!-- end card-box -->
 
                         </div> <!-- end Col -->
-
-
-
-
                     </div><!-- End row -->
-
                 </div> <!-- container -->
             }
-
+            else
+            {
+                <div class="card-box">
+                    <h4>No Records Found</h4>
+                </div>
+            }
         </div>
     </div>
 

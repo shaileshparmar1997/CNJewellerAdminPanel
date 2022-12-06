@@ -25,7 +25,7 @@ namespace CNJewellerAdmin.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=IAH1L3006\\SQLEXPRESS;Database=CNJ;User Id=sa; password=ikart@3689");
+                optionsBuilder.UseSqlServer("Server=66.23.234.6;Database=ADS_CNJ;User Id=ADSCode; password=ADS#3689!@#$;TrustServerCertificate=True");
             }
         }
 

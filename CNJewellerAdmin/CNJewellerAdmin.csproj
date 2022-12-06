@@ -33,6 +33,7 @@
     <Folder Include="Data\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Repository\" />
+    <Folder Include="wwwroot\Content\DriveServiceCredentials.json\" />
     <Folder Include="wwwroot\SharedDriveFiles\" />
     <Folder Include="wwwroot\theme\assets\images\NewFolder\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\src\" />
@@ -66,19 +67,6 @@
   <ItemGroup>
     <Content Update="wwwroot\Content\client_secret.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\Content\DriveServiceCredentials.json\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\Content\Google - Copy.Apis.Auth.OAuth2.Responses.TokenResponse-user">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\Content\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="wwwroot\css\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
