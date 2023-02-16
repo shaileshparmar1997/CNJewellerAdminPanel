@@ -43,7 +43,7 @@ namespace CNJewellerAdmin.Models
             Google.Apis.Drive.v3.DriveService service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "GDrive",
+                ApplicationName = "GoogleDriveRestAPI-v3"
             });
             return service;
         }
@@ -83,7 +83,7 @@ namespace CNJewellerAdmin.Models
             // Define parameters of request.
             Google.Apis.Drive.v3.FilesResource.ListRequest FileListRequest = service.Files.List();
             // for getting folders only.
-            //FileListRequest.Q = "mimeType='application/vnd.google-apps.folder'";
+           // FileListRequest.Q = "mimeType='application/vnd.google-apps.folder'";
             FileListRequest.Fields = "nextPageToken, files(*)";
 
             // List files.
@@ -415,9 +415,11 @@ namespace CNJewellerAdmin.Models
 
             Google.Apis.Drive.v3.FilesResource.ListRequest request = service.Files.List();
             request.Q = "mimeType='application/vnd.google-apps.folder'";
-            request.Fields = "files(id, name, size)";
+            //request.Fields = "parents";
+           request.Fields = "files(*)";
 
             Google.Apis.Drive.v3.Data.FileList result = request.Execute();
+            //result.Files = result.Files.Where(x => x.Parents == null).ToList();
             foreach (var file in result.Files)
             {
                 GoogleDriveFileNew File = new GoogleDriveFileNew
