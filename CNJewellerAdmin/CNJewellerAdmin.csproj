@@ -33,7 +33,6 @@
     <Folder Include="Data\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Repository\" />
-    <Folder Include="wwwroot\SharedDriveFiles\" />
     <Folder Include="wwwroot\theme\assets\images\NewFolder\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\src\" />
     <Folder Include="wwwroot\theme\assets\libs\bootstrap-maxlength\test\" />
